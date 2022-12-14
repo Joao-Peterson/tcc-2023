@@ -1,0 +1,19 @@
+\directlua{require("lua/tablecsv.lua")}
+
+% open file to be used by subsequent calls
+% arg1: filename
+\newcommand\openfile[1]{\luaexec{openFile(\luastring{#1},",",true)}}
+
+% get a field value by col row reference
+% arg1: col
+% arg2: row
+\newcommand\getfield[2]{\luaexec{getField(#1,#2)}}
+
+% get a range from the opened file formatted for tex tabular's. Ex: "1 & 2 & 3 \\\hline"
+% arg1: first col
+% arg2: first row
+% arg3: second col
+% arg4: second row
+\newcommand\tabularfromrange[4]{\luaexec{tabularFromRange(#1,#2,#3,#4)}}
+% arg5: line ending. If not provided defaults to "\hline"
+% \newcommand\getrange[5]{\luaexec{getRange(#1,#2,#3,#4,\luastring{#5})}}

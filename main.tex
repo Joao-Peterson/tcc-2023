@@ -1,0 +1,143 @@
+\input{include.tex}
+\input{lua/tablecsv.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titulo{Desenvolvimento de um método e sistema para trans compilação e simulação de redes de petri para utilização em  controladores lógicos industriais}              								% titulo do trabalho
+\autor{João Peterson Scheffer}                 							% nome do discente
+\local{Luzerna}	               								% local/cidade
+\def\estado{SC}												% estado, formato duas letras. Ex: SC, PR, SP 
+\data{Dezembro de 2022}       								% data da capa
+\def\Data{08 de dezembro de 2022}                      		% data da folha de aprovação
+\def\instituicaoartigo{do}									% artigo para se referir a instituição. Ex: 'da' Universidade, 'do' Instituto
+\def\nomeinstituicao{Instituto Federal Catarinense}		% nome da instituição
+\def\curso{Bacharelado em Engenharia de Controle e Automação}							% curso. Ex: Bacharelado em XXX, Licenciatura em XXXX
+\def\cursotitulo{Bacharel em Engenharia de Controle e Automação}							% titulo a quem se forma no curso. Ex: Bacharel em XXXX
+\def\campus{Campus \imprimirlocal}							% campus. Ex: Campus Luzerna
+\instituicao{ 												% instituição, curso e campus
+	\nomeinstituicao
+	\par
+	\curso
+	\par
+	\textit{\campus}
+}
+
+\tipotrabalho{Trabalho de conclusão (Bacharelado)} 			% tipo de trabalho, usado na ficha catalográfica Ex: Trabalho de conclusão (Bacharelado), Tese (Doutorado), Dissertação (Mestrado).
+\orientador{Prof. Msc. Tiago Javorani Prati} 								% nome do orientador
+% \coorientador{Prof. Msc. NOME} 							% nome do coorientador
+\def\primeiroavaliador{Prof. Msc. XXXXXXX}           		% primeiro avaliador
+\def\primeiroavaliadorafiliacao{							% instituição do primeiro avaliador
+	Instituto Federal Catarinense
+}           		
+\def\segundoavaliador{Prof. Dr. XXXXXX}              		% segundo avaliador
+\def\segundoavaliadorafiliacao{								% instituição do segundo avaliador
+	Instituto Federal Catarinense
+}           		
+\def\PalavrasChave{	                                 		% palavras chave para o resumo
+	redes de petri; automação industrial; software.
+} 
+\def\Keywords{												% palavras chave para o resumo em inglês
+	petri nets; industrial automation; software.
+}
+\preambulo{													% O preambulo deve conter o tipo do trabalho, o objetivo, o nome da instituição e a área de concentração 
+	Trabalho de conclusão apresentado à banca examinadora do curso de \curso, do \nomeinstituicao, \campus, como requisito para a obtenção do título de \cursotitulo, em cumprimento às exigências de sua componente curricular.
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{sections/capa}
+\input{sections/folhaderosto}
+\makeindex
+
+\begin{document}
+\pretextual
+\imprimircapa
+\imprimirfolhaderosto
+
+\include{sections/folhadeaprovacao}
+\include{sections/dedicatoria}
+\include{sections/agradecimentos}
+\include{sections/epigrafe}
+\include{sections/resumo}
+\include{sections/sumario}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textual
+\pagestyle{simple-folio}                                                            % sem nome do capitulo no cabeçalho
+\include{sections/introducao}
+\include{sections/metodologia}
+\include{sections/fundamentacao}
+\include{sections/desenvolvimento}
+\include{sections/resultados}
+\include{sections/conclusao}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\postextual
+\addtocontents{toc}{\protect\vspace{-\cftbeforechapterskip}}						% Manter esse comando para o espaçamento correto nas referências
+% \citeoption{abnt-repeated-author-omit=yes}
+\bibliography{ref.bib}
+
+\include{sections/apendice}
+\include{sections/anexo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \appendix
+
+% \includepdf[
+%     pages={1},angle=270,turn=false,noautoscale=true,fitpaper=true,frame=false,scale=0.8,
+%     pagecommand={
+%         \section{Lista de materiais}
+%         \label{a:lista}
+%     }
+% ]{../calc.pdf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Exemplos:
+
+% \begin{table}[!h]
+%     \centering
+%     \caption{Fatores de correção por circuito.}
+%     \begin{tabular}{cC{2cm}C{2cm}C{2cmt}C{2cm}C{2cm}C{2cm}}
+%         \hline
+%         N & Potência (\si{\volt\ampere}) & Temperatura (\si{\celsius}) & Fator de correção de temperatura & Número de circuitos & Método de referência & Fator de correção de agrupamento \\
+%         \hline
+%         \hline
+%         \openfile{../secao_projeto1.csv}
+%         \tabularfromrange{1}{2}{7}{4}
+%     \end{tabular}
+%     \vspace{8pt}\\
+%     \caption*{Fonte: Do autor.}
+% \label{tab:secao_projeto1}
+% \end{table}
+
+% \begin{figure}[h!]
+%     \centering
+%     \caption{Gráfico de Torque e rendimento em função da velocidade de rotação do motor CC em ligação híbrida.}
+%     \includegraphics[width=17cm]{imagens/2.3.eps}
+% \label{fig:2.3}
+% \end{figure}
+
+% \begin{figure}[h!]
+%     \centering
+%     \caption{Circuito conversor proposto.}
+%     \includesvg[width=14cm]{images/2.svg}
+%     \label{fig:2.1}
+% \end{figure}
+
+% \begin{table}[!h]
+%     \caption{Medição de grandezas para topologia de polarização como chave - Contatos do relé abertos e $R_b$ prático}
+%     \centering
+%     \begin{tabular}{|c|c|c|c|}
+%         \hline % 
+%         $R_{b}$ (\si{K\Omega}) & $i_{c}$ (\si{mA}) & $V_{ce}$ (\si{V}) & $V_{rele}$ (\si{V}) \\
+%         \hline
+%         \csvreader[head to column names]{exp4.3.csv}{}{ \rb & \ic   & \vce   & \vrele}
+%         \\ \hline
+%     \end{tabular}
+% \end{table}
+
+% \lstinputlisting[
+%     language=Octave,
+%     caption={"fir\_lowpass.m"},
+%     label=code:fir_lowpass
+% ]{../fir_lowpass.m}

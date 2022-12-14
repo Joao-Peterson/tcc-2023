@@ -1,0 +1,31 @@
+\thispagestyle{empty}
+\begin{titlepage}
+\vfill
+	\begin{center}
+		\begin{figure}[t]
+			\centering
+			\includegraphics[width=7cm]{images/logoifc.png}\\[-0.1in]
+		\end{figure}
+
+		\normalsize\bfseries\MakeUppercase{\coverinstitution} \\
+		\normalsize\bfseries\MakeUppercase{\coverdegree}  \\ 
+		
+		\vspace*{1in}
+		\begin{normalsize} 
+			\bfseries\MakeUppercase{\coverauthors}
+		\end{normalsize}
+
+		\vspace*{4cm}
+		\noindent \\
+		\normalsize\bfseries\MakeUppercase{\coverclass \\ \coverdescription} \\
+		\vfill
+		\normalsize\bfseries\MakeUppercase{\coverlocation \\ \coveryear}
+	\end{center}
+\end{titlepage}
+
+\ifthenelse{\isundefined{\inserttoc}}{
+}{
+	\renewcommand*\contentsname{Sumário}
+	\tableofcontents
+	\cleardoublepage
+}
