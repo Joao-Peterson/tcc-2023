@@ -2,10 +2,10 @@
 
 Quando se trata de sistemas dinâmicos como um todo há sempre um interesse de criar, entender, prever e controlar estes sistemas, e no âmbito de sistemas discretos orientados a eventos \footnote{Sistemas que trabalham com valores discretos como ligado e desligado por exemplo e possuem mudança de estado conforme eventos também discretos.}, como alguns sistemas industriais de automação de interesse neste trabalho, há várias metodologias, práticas, tecnologias e linguagens de programação capazes de trabalhar estes sistemas de forma a alcançar resultados esperados, cada qual possuí vantagens e desvantagens.
 
-No âmbito industrial, para realizar o controle e automação de processos, comumente é utilizado controladores lógicos programáveis, PLC's, e estes podem ser programados para realizar as funções desejadas e para isso empregam a utilização de linguagens de programação como: 
+No âmbito industrial, para realizar o controle e automação de processos, comumente são utilizados controladores lógicos programáveis, PLC's, e estes podem ser programados para realizar as funções desejadas e para isso empregam a utilização de linguagens de programação como: 
 
 \begin{itemize}
-	\item \textit{Ladder}, que representa um processo de forma visual inspirada em lógica de contatos \footnote{Uma forma simples de programação baseada na representação visual de lógica de contato, como vista em diagramas com relés e contatoras.}.
+	\item \textit{Ladder}, que representa um processo linear de forma visual inspirada em lógica de contatos \footnote{Uma forma simples de programação baseada na representação visual de lógica de contato, como vista em diagramas com relés e contatoras.}.
 	\item Lista de instrução, que é uma linguagem escrita, não visual, e que representa um fluxo de operações com base em comandos de texto.
 	\item Grafcet, uma linguagem visual que representa um processo em forma de fluxo com base em passos de um nó para outro nó do processo, onde cada nó é uma instrução de ação e cada passo é dado conforme uma transição atrelada a um evento. 
 \end{itemize}
@@ -18,31 +18,37 @@ Neste contexto há varias linguagens de modelagens lógicas, como autômatos, m�
 
 As redes de Petri são assim um instrumento de maior formalidade e podem representar conceitos abstratos, fazendo da mesma uma ótima ferramenta para automação e controle de sistemas a eventos discretos, e que cada vez mais vem sendo estudada em meio acadêmico quanto a sua utilização como mecanismo de modelagem de processos, modelagem de sistemas criticos \cite{1702225} e \cite{ghezzi1991unified}, e prevenção de \textit{deadlocks} \footnote{Singularidade em processos onde o sistema entra em um ponto de parada de forma imprevista e não possuí forma de autocorreção, permanece ou parado em falha ou em repetição contínua de uma única instrução.} \cite{kaid2015applications}.
 
-Visto o um grau de interesse acadêmico, aplicações em situações bem definidas, significando se tratar de uma ferramenta adequada, e ainda a utilidade industrial, dado sua ótima representação de processos e liberdade de abstração, pode se dizer que há interesse prático em redes de petri, porém o emprego real deste tipo de tecnologia é mínimo, existem metodologias \cite{6621049} que por exemplo, propõem a funcionalidade de interpretação de redes de petri de alto nível para código \textit{Ladder} capaz de ser então usado em PLC's para uso industrial, função implementada em projetos como \textit{PetriLab} \cite{de2015petrilab}, porém não trazem integração real, uma boa experiência de programação ou mesmo boas práticas de design de \textit{software}, características que são valorizadas e por vezes indispensáveis para o processo de desenvolvimento, integração, teste, manutenção e melhoria contínua de sistemas e controle de sistemas em meio industrial, em outras palavras, há necessidade de ferramentaria adequada e atrativa as empresas e desenvolvedores destes sistemas industriais bem como difusão da utilização de redes de petri como ferramenta de uso geral e específico.
+Visto o um grau de interesse acadêmico, aplicações em situações bem definidas, significando se tratar de uma ferramenta adequada, e ainda a utilidade industrial, dado sua ótima representação de processos e liberdade de abstração, pode-se dizer que há interesse prático em redes de petri, porém o emprego real deste tipo de tecnologia é mínimo, existem metodologias \cite{6621049} que por exemplo, propõem a funcionalidade de interpretação de redes de petri de alto nível para código \textit{Ladder} capaz de ser então usado em PLC's para uso industrial, função implementada em projetos como \textit{PetriLab} \cite{de2015petrilab}, porém não trazem integração real, uma boa experiência de programação ou mesmo boas práticas de design de \textit{\textit{software}}, características que são valorizadas e por vezes indispensáveis para o processo de desenvolvimento, integração, teste, manutenção e melhoria contínua de sistemas e controle de sistemas em meio industrial, em outras palavras, há necessidade de ferramentaria adequada e atrativa as empresas e desenvolvedores destes sistemas industriais bem como difusão da utilização de redes de petri como ferramenta de uso geral e específico.
 
 \section{Justificativa}
 
 Sendo apresentado o estado atual de disseminação de utilização de redes de petri, tanto geral como industrial, justifica se a criação de ferramentaria necessária ao desenvolvimento de aplicações. Aplicações tais que implementam necessariamente formas visuais de representação e edição, bem como simulação e observação do funcionamento destas redes e ainda a funcionalidade de transformar estas redes em programas prontos para utilização em meio industrial.
 
-A capacidade de transformar tais redes em programas industriais, compreende se como o processo de trans compilação, onde a rede de petri é traduzida através de um algoritmo proposto para o resultado de saída, sendo esta saída código puro, arquivos digitais ou programas prontos pra utilização com PLC's industriais.
+A capacidade de transformar tais redes em programas industriais, compreende se como o processo de compilação, onde a rede de petri é traduzida através de um algoritmo proposto para o resultado de saída, sendo esta saída código puro, arquivos digitais ou programas prontos pra utilização com PLC's industriais.
 
 \section{Objetivos}
 
 \subsection{Objetivo geral}
 
-Desenvolvimento de um ambiente de edição, simulação e compilação de rede de petri voltadas para utilização em meio industrial, PLC's.
+Desenvolvimento de um ambiente de definição, simulação e compilação e armazenamento de rede de petri voltadas para utilização em meio industrial, PLC's.
 
 \subsection{Objetivos específicos}
 
 \begin{itemize}
-	\item Desenvolvimento de uma biblioteca implementada em linguagem C, contendo uma estrutura de dados que represente a rede de petri em memória e que implemente a dinâmica de funcionamento, a simulação.
-	
-	\item Desenvolvimento de algoritmos de trans compilação de redes de petri para o seguinte alvo:
+	\item Desenvolvimento de uma biblioteca implementada em linguagem C que deve implementar os seguintes pontos: 
 	\begin{itemize}
-		\item Lista de instrução, em formato de texto.
+		\item Estrutura de dados.
+		\item serialização de dados para armazenamento.
+		\item Capacidade de checagem e validação.
+		\item Capacidade de execução normal e temporizada de forma assíncrona.
+	\end{itemize}
+	
+	\item Desenvolvimento de algoritmos de compilação de redes de petri para os seguintes alvos:
+	\begin{itemize}
+		\item Lista de instrução, em formato de texto para a referência PLC WEG TPW04.
 	\end{itemize}
 
-	\item Desenvolvimento de uma aplicação gráfica para edição e simulação de redes de petri utilizando o \textit{framework} Flutter com linguagem de programação Dart.
+	% \item Desenvolvimento de uma aplicação gráfica para edição e simulação de redes de petri utilizando o \textit{framework} Flutter com linguagem de programação Dart.
 
-	\item Desenvolvimento de uma biblioteca em Dart que porta as funções da biblioteca em linguagem C para utilização dentro do \textit{framework} Flutter.
+	% \item Desenvolvimento de uma biblioteca em Dart que porte as funções da biblioteca em linguagem C para utilização dentro do \textit{framework} Flutter.
 \end{itemize}

@@ -1,5 +1,33 @@
 \chapter{Metodologia}
 
-Este trabalho será de grande parte um processo de desenvolvimento por parte do autor de maneira autônoma, dado que os tópicos de programação e alguns detalhes de implementação são por natureza de livre implementação, tornando este trabalho por grande parte um trabalho exploratório. Em contraste com os métodos utilizados, as visões e referências de trabalhos passados, que irão servir de guia para implementação de alguns aspectos gerais, são de cunho bibliográfico.
+Este trabalho será de grande parte um processo de desenvolvimento por parte do autor de maneira autônoma, dado que os tópicos de programação e alguns detalhes de implementação são por natureza de livre implementação, tornando este trabalho por grande parte um trabalho exploratório. 
 
-No que se refere ao aspecto visual da aplicação de edição, foi tomado inspiração do trabalho anterior Petrilab \cite{de2015petrilab} bem como o editor de texto Visual Studio Code \cite{vscode}. De forma mais ampla, redes de petri sempre possuíram um visual distinto e difundido pela literatura, o que se traduz na implementação do Petrilab e eventualmente deste trabalho. Quanto a definição do tipo de rede de petri adotada neste trabalho bem como a base de desenvolvimento dos algoritmos de trans compilação, estes foram baseados em revisão bibliográfica e trabalhos anteriores.
+\section{A base do projeto}
+
+Para implementação do sistema proposto, é necessário entender que deseja-se que os resultados do sistema, as redes de petri, sejam acessíveis em várias plataformas, visando uma generalização. Entende se assim que deve se ter um motor capaz de executar estas redes e seu funcionamento em suas plataformas, em computadores de uso geral, e em sistemas embarcados torna se atrativo uma implementação na forma de uma biblioteca em linguagem C, pois a maioria dos sistemas embarcados funcionam com \textit{toolchains}\footnote{Conjunto de ferramentas que possibilitam a programação e manuseio de programas para uma plataforma e/ou arquitetura de computador específica.} em C, e também pois abre as portas para que outros ambientes e linguagens de programação utilizem esta biblioteca, isto é possível pelo fato de C ser de baixo nível e seguir padrões estabelecidos de arquivos e execução de código no geral, tornando possível que linguagens de mais alto nível possam fazer \textit{bindings}\footnote{Sistema onde se mapeia de forma diretas funções, variáveis e definições de código entre sistemas/ambientes de programação diferentes, possibilitando interoperabilidade entre elas} para com a biblioteca. 
+
+Mais ainda, outro motor importante é a capacidade de executar tais redes em plataformas distintas, onde a portabilidade da biblioteca em C torna se difícil, como os PLC's comentados anteriormente, onde a lista de instrução é mais comum do que a linguagem C, podendo a lista de instrução, tanto pela difusão quanto pelo baixo nível de abstração, um candidato preferido para alvo de compilação, assim a rede pode ser editada, simulada e testada em um computador de uso geral por exemplo e então compilada para lista de instrução, que deve ser gerada de forma a garantir funcionalidade igual a da biblioteca em C.
+
+O baixo nível de abstração da lista de instrução ainda possibilita que esta seja usada como fonte para compilação posterior pelas ferramentas de terceiros para suas plataformas alvo, abrindo mais funcionalidade para esse tipo de sistema de trabalho, por exemplo, lista de instrução é comumente mapeada para \textit{Ladder} de forma intercambiáveis, ou seja, bastante útil.
+
+Para implementação da representação das redes, da dinâmica e da compilação será utilizada a linguagem C bem como um sistema de compilação para a biblioteca usando ferramentas básicas no padrão POSIX\nocite{posix}, em especial do projeto GNU \cite{gnu} sendo elas o compilador \textit{gcc}, e para \textit{build} o \textit{make}.
+
+% \section{Parte visual}
+
+% No que se refere ao aspecto visual, temos o desenvolvimento de uma aplicação de edição para qual foi tomada inspiração do trabalho anterior Petrilab \cite{de2015petrilab} bem como o editor de texto Visual Studio Code \cite{vscode}. Para o desenvolvimento desta aplicação devemos pensar que a mesma será utilizada em computadores desktop, será escolhido assim um framework visando funcionamento em diversos sistemas operacionais, facilidade e tendencias modernas, como o framework Flutter\cite{flutter}. 
+
+% O mesmo possui uma metodologia moderna de desenvolvimento de aplicações visuais bem como a capacidade de ter como linguagem de programação o Dart, qual possui interoperabilidade com C, podendo assim a aplicação visual utilizar a biblioteca em C para simulação a rede de petri criada.
+
+\section{Rede de petri}
+
+Quanto a definição do tipo de rede de petri adotada neste trabalho, serão adotadas redes de petri com extensões específicas e utilidade geral e industrial, garantindo maior flexibilidade no design. A definição destas extensões e os detalhes de implementação serão discutidos e embasados conforme trabalhos anteriores bem como a experiência empírica do autor.
+
+\section{Compilador de lista de instrução}
+
+Lista de instrução é um tipo de programação relativamente difundida e portanto bem generalizada, mas ainda assim há diferenças entre fabricantes. Em vista disto a implementação do compilador de rede de petri para lista de instrução irá utilizar a referência de lista de instrução da fabricante WEG para o PLC TPW04 \cite{wegtpw04}, sendo este um modelo amplamente utilizado em meio industrial e também de fácil acesso em educacional e acadêmico. Futuros trabalhos podem partir da mesma referência para implementação de compiladores para mais arquiteturas de PLC's, dada que as diferenças de implementação são pequenas entre tipos de plataformas e fabricantes diferentes devido a norma IEC 61161-3 \cite{IEC611313}.  
+
+\section{Publicação}
+
+Todo o trabalho desenvolvido nesta obra será versionado e disponibilizado como o repositório "pnet" \cite{github-pnet} via Github \cite{github}, sob a licença domínio público MIT \cite{mit-license}.
+
+% Todo o trabalho desenvolvido nesta obra será versionado e disponibilizado como repositórios distintos via Github \cite{github}, todos sob a licença domínio público MIT \cite{mit-license}, sendo estes repositórios o da biblioteca C \cite{github-pnet}, da aplicação visual Flutter \cite{github-petricad} e do plugin Flutter que irá encapsular a funcionalidade da biblioteca em C via bindings utilizando as capacidades da linguagem Dart \cite{github-pnet-dart}.

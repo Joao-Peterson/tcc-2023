@@ -51,10 +51,13 @@
         "desconsiderável",
         "despres",
         "despresível",
+        "desserialização",
+        "desserializar",
         "diodo",
         "diodos",
         "Doxygen",
         "drain",
+        "Electrotechnical",
         "fasorial",
         "fourier",
         "Graetz",
@@ -92,6 +95,8 @@
         "Scheffer",
         "senoidais",
         "senoidal",
+        "serialização",
+        "Serialização",
         "SIBI",
         "Snippets",
         "somatória",
@@ -109,5 +114,16 @@
         "webserver",
         "wifi",
         "zenner"
+    ],
+    "super-figure.filesToWatch": [
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/prio.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/mutex.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/samplepetri.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/petritime.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/comedor.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/reset.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/negado.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/illadder.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/pnetcomp.svg"
     ]
 }
