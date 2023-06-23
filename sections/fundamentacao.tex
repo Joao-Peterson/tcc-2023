@@ -1,6 +1,6 @@
 \chapter{Fundamentação teórica}
 
-Nesta introdução teórica, será abordado o funcionamento básico das redes de petri e alguns dos principais tipos existentes. É importante compreender esses conceitos fundamentais antes de prosseguir para a implementações de \textit{software}, pois definirá a ideia de funcionamento e implementação, onde poderá se observar a utilidade das redes, possíveis abstrações e comportamentos desejados, como os de interesse abordados na seção de introdução. Também conceitos relacionados a implementação de \textit{software} e outros conceitos adjacentes necessários ao entendimento do desenvolvimento das partes integrantes do trabalho.
+Nesta introdução teórica, será abordado o funcionamento básico das redes de petri e alguns dos principais tipos existentes. É importante compreender esses conceitos fundamentais antes de prosseguir para a implementação de \textit{software}, pois definirá a ideia de funcionamento e implementação, onde poderá se observar a utilidade das redes, possíveis abstrações e comportamentos desejados, como os de interesse abordados na seção de introdução. Também conceitos relacionados a implementação de \textit{software} e outros conceitos adjacentes necessários ao entendimento do desenvolvimento das partes integrantes do trabalho.
 
 \section{Redes de petri}
 
@@ -11,7 +11,7 @@ Uma rede de petri é composta por lugares, transições, fichas e arcos. Cada co
 \begin{itemize}
 	\item Lugares: Os lugares representam estados ou condições do sistema. Eles são representados por círculos em um diagrama de rede de petri. Os lugares podem conter fichas, que são unidades discretas que refletem o estado atual do sistema.
 	
-	\item Transições: As transições representam eventos ou ações que podem ocorrer no sistema. Elas são representadas por retângulos em um diagrama de rede de petri. Para que uma transição seja disparada, é necessário que todos os lugares de entrada estejam marcados com pelo menos um ficha.
+	\item Transições: As transições representam eventos ou ações que podem ocorrer no sistema. Elas são representadas por retângulos em um diagrama de rede de petri. Para que uma transição seja disparada, é necessário que todos os lugares de entrada estejam marcados com pelo menos uma ficha.
 	
 	\item Fichas: As fichas são unidades discretas que se movem entre os lugares em resposta à ocorrência das transições. Elas refletem o estado atual do sistema e representam o fluxo de controle. Quando uma transição é disparada, ela consome as fichas dos lugares de entrada e produz novas fichas nos lugares de saída.
 	
@@ -52,7 +52,7 @@ Esses são apenas alguns dos principais tipos de redes de petri, e cada um deles
 
 \subsection{Delimitação de uma rede para uso industrial}
 
-As redes de petri são particularmente interessantes pois apresentam um bom grau de flexibilidade e capacidade de abstração, podendo comportar lógicas completas, simples e robustas, então é de interesse delimitar o tipo de rede que deverá ser trabalhada de forma que possamos ter as funcionalidades e características para modelagem de sistemas, como preferência para sistemas de automação industrial. 
+As redes de petri são particularmente interessantes, pois apresentam um bom grau de flexibilidade e capacidade de abstração, podendo comportar lógicas completas, simples e robustas, então é de interesse delimitar o tipo de rede que deverá ser trabalhada de forma que possamos ter as funcionalidades e características para modelagem de sistemas, como preferência para sistemas de automação industrial. 
 
 O \textit{software} Petrilab \cite{de2015petrilab} abre o caminho com uma delimitação interessante e prática para uso industrial, onde se propõe a utilização de métodos de entrada e saída para rede de petri, condições lógicas que permitem o acionamento de transições e os tipos de arcos desejados, sendo eles os de peso e arcos negados. Baseado neste trabalho podemos construir e reavaliar algumas decisões sobre a definição da rede de petri. 
 
@@ -66,7 +66,7 @@ Particularmente no uso industrial a utilização de temporização é indispens�
 	\label{fig:petritime}
 \end{figure}
 
-Os arcos com peso são úteis porém é fácil encontrar situações onde algumas abstrações se fazem convenientes, como é o caso de realizar a retirada de todos as fichas de um lugar de uma só vez, um comedor de fichas, figura \ref{fig:comedor}, cujo trabalho é exatamente este. Conforme a lógica desejada, tal comportamento pode ser também atrelado a um outro tipo de arco, o arco de \textit{reset} (reinicialização) \cite{ResetNetsBetweenDecidabilityAndUndecidability}, não presente na implementação do Petrilab, onde após o disparo de uma transição o mesmo irá remover todos as fichas do lugar atrelado, sendo essa relação não direcional, como nos arcos de peso. Um exemplo de arco de \textit{reset} pode ser visto na figura \ref{fig:reset}. 
+Os arcos com peso são úteis, porém é fácil encontrar situações onde algumas abstrações se fazem convenientes, como no caso de realizar a retirada de todos as fichas de um lugar de uma só vez, um comedor de fichas, figura \ref{fig:comedor}, cujo trabalho é exatamente este. Conforme a lógica desejada, tal comportamento pode ser também atrelado a outro tipo de arco, o arco de \textit{reset} (reinicialização) \cite{ResetNetsBetweenDecidabilityAndUndecidability}, não presente na implementação do Petrilab, onde após o disparo de uma transição o mesmo irá remover todos as fichas do lugar atrelado, sendo essa relação não direcional, como nos arcos de peso. Um exemplo de arco de \textit{reset} pode ser visto na figura \ref{fig:reset}. 
 
 \begin{figure}[ht]
 	\centering
@@ -110,9 +110,9 @@ Nada impede também a utilização da própria quantidade de fichas seja a saíd
 
 Não nos atrelando a definição formal matemática das redes de petri, é necessário abordar a representação dessas redes, de maneira computacional na forma de \textit{software}, e existem dois jeitos clássicos de realizar essa representação, de forma relacional ou matricial.
 
-A forma relacional trata lugares e transições como vértices de um gráfico direcionado, e em código há uma lista de lugares e transições e uma lista de relações, onde cada relação é atrelada a um lugar e transição e possui metainformação sobre o tipo de relação, como o próprio tipo, que pode ser um arco direcionado de peso, um arco negado ou de \textit{reset}. Esse tipo de representação é mais compreensível e intuitiva, porém pode sofrer impactos de desempenho, pois para realização de verificações e disparos da redes é necessário percorrer estas listas para cada tipo de operação distinta.
+A forma relacional trata lugares e transições como vértices de um gráfico direcionado, e em código há uma lista de lugares e transições e uma lista de relações, onde cada relação é atrelada a um lugar e transição e possui metainformação sobre o tipo de relação, como o próprio tipo, que pode ser um arco direcionado de peso, um arco negado ou de \textit{reset}. Esse tipo de representação é mais compreensível e intuitiva, porém pode sofrer impactos de desempenho, pois para realização de verificações e disparos da rede é necessário percorrer estas listas para cada tipo de operação distinta.
 
-A outra forma, matricial, declara-se uma matriz de arcos, onde as linhas são os lugares e as colunas as transições, e o valor em determinada posição determina a quantidade de fichas a serem movidas, como no caso de arcos de peso. Este tipo de implementação é mais simples e rápida, pois não há necessidade de percorrer as relações, que é uma operação de tempo linear, porém a representação matricial cresce quadraticamente conforme mais lugares e transições são atrelados, aumentando consumo de memória e armazenamento. 
+A outra forma, matricial, declara-se uma matriz de arcos, onde as linhas são os lugares, e as colunas as transições, e o valor em determinada posição determina a quantidade de fichas a serem movidas, como no caso de arcos de peso. Este tipo de implementação é mais simples e rápida, pois não há necessidade de percorrer as relações, que é uma operação de tempo linear, porém a representação matricial cresce quadraticamente conforme mais lugares e transições são atrelados, aumentando consumo de memória e armazenamento. 
 
 Dado que o tamanho de redes de petri não são usualmente grandes, e que há prioridade de processamento sobre memória, será escolhida a representação matricial para implementação em \textit{software} da rede de petri proposta. Tal representação acomoda tranquilamente os tipos de arcos propostos, bem como temporização e de entrada e saída.
 
@@ -135,25 +135,27 @@ Quando duas transições estão sensibilizadas simultaneamente, no momento do di
 
 Outra maneira é garantir a propriedade de uma transição por disparo, parando o processamento após o primeiro disparo, que será realizado na transição sensível de menor índice, o que pode por vezes causar ambiguidade sobre qual transição será disparada antes.
 
-Para esta implementação será utilizada a segunda opção devido a simplicidade e ao fato das redes serem temporizadas, de entrada/saída e serem executadas em tempo real, diminuindo naturalmente a probabilidade que haja colisão de sensibilidade entre uma ou mais transições ao mesmo tempo, devido as entradas virem de um sistema físico real em tempo real. Delimita se assim um aviso de ambiguidade para este tipo de implementação e a necessidade de se garantir apenas uma transição por disparo na rede.
+Para esta implementação será utilizada a segunda opção devido à simplicidade e ao fato das redes serem temporizadas, de entrada/saída e serem executadas em tempo real, diminuindo naturalmente a probabilidade que haja colisão de sensibilidade entre uma ou mais transições ao mesmo tempo, devido às entradas virem de um sistema físico real em tempo real. Delimita se assim um aviso de ambiguidade para este tipo de implementação e a necessidade de se garantir apenas uma transição por disparo na rede.
 
-Tal discussão também se estende as transições temporizadas, que ao serem executadas de forma assíncrona podem vir a se sobrepor sobre outras transições sensibilizadas, novamente nosso comprometimento irá garantir que apenas uma aconteça por vez.  
+Tal discussão também se estende as transições temporizadas, que ao serem executadas de forma assíncrona podem vir a se sobrepor a outras transições sensibilizadas, novamente nosso comprometimento irá garantir que apenas uma aconteça por vez.  
 
 \subsubsection{Entradas}
 
 Como discutido anteriormente, as entradas são dadas como eventos atrelados a transições, e com a mesma preocupação de disparos simultâneos existem dois casos a serem considerados, transições com múltiplos eventos de entrada, e várias transições que utilizam a mesma entrada.
 
-Para fins de simplificação será reforçado que cada transição seja atrelada unicamente a uma entrada e vice-versa, garantindo que disparos simultâneos causados pela mesma entrada nunca ocorram. Caso a mesma entrada seja atrelada a várias transições pode haver ambiguidade, pelo fato das transições dependerem do mesmo evento no mesmo ciclo de execução.
+Para fins de simplificação será reforçado que cada transição seja atrelada unicamente a uma entrada e vice-versa, garantindo que disparos simultâneos causados pela mesma entrada nunca ocorram. Caso a mesma entrada seja atrelada a várias transições, pode haver ambiguidade, pelo fato das transições dependerem do mesmo evento no mesmo ciclo de execução.
 
-Casos onde deseja-se tal comportamento podem ser facilmente e seguramente implementados utilizando se múltiplas transições e lugares auxiliares, deixando assim essa abstração de responsabilidade do autor da rede de petri.
+Casos onde deseja-se tal comportamento, pode-se fácil e seguramente ser implementado utilizando múltiplas transições e lugares auxiliares, deixando assim essa abstração de responsabilidade do autor da rede de petri.
 
 \section{Estruturas de dados e execução de código}
 
-Quando trata-se de programação de bibliotecas e artifícios\footnote{Pequena parte, fragmento, de um todo} de código, ou seja, código que será usado por terceiros, é necessário sempre se ter em mente que a implementação seja além de funcional, bem documentada e que seja robusta a erros, conceito que envolve mas não é limitado a, tratamento de erros e exceções, visibilidade parcial da implementação, que esconde parte da funcionalidade evitando uso indesejado por parte do usuário, ou ainda a utilização de testes unitários, que testam partes individuais da biblioteca de forma automatizada. Então é necessário entender alguns conceitos de organização e execução de código por que garantirão nossas expectativas de funcionamento bem como irão garantir a robustez desejada a biblioteca. 
+Quando se trata de programação de bibliotecas e artifícios\footnote{Pequena parte, fragmento, de um todo} de código, ou seja, código que será usado por terceiros, é necessário sempre se ter em mente que a implementação seja além de funcional, bem documentada e que seja robusta a erros, conceito que envolve, mas não é limitado a, tratamento de erros e exceções, visibilidade parcial da implementação, que esconde parte da funcionalidade evitando uso indesejado por parte do usuário, ou ainda a utilização de testes unitários, que testam partes individuais da biblioteca de forma automatizada. Então é necessário entender alguns conceitos de organização e execução de código por que garantirão nossas expectativas de funcionamento bem como irão garantir a robustez desejada a biblioteca. 
 
 \subsection{Listas ligadas}
 
-Listas ligadas, ou listas encadeadas são estruturas de dados parecidas com listas normais, que são conjuntos de dados de mesmo tipo dispostos de forma sequencial por um índice numérico, já as listas ligadas não são. Elas ganham a denominação de lista pois cada elemento guarda dentro de si mesmo uma referência para o próximo elemento da lista, de forma encadeada, daí o nome desse tipo de lista. Suas vantagens em relação as listas normais são que elas não tem espaço de memória predefinido e alinhado, elas podem crescer indefinidamente e de forma desorganizada com relação ao alinhamento de memória, são flexíveis, mas com o custo de terem de ser percorridas toda vez para se encontrar o elemento em dada posição, operação que tem um tempo de execução proporcional ao tamanho da lista, enquanto que a lista normal faz isso de forma indexada, por isso é de tempo constante.
+Listas ligadas, ou listas encadeadas, são estruturas de dados parecidas com listas normais, que são conjuntos de dados de mesmo tipo dispostos de forma sequencial por um índice numérico, já as listas ligadas não são. Elas ganham a denominação de lista, pois cada elemento guarda dentro de si mesmo uma referência para o próximo elemento da lista, de forma encadeada, daí o nome desse tipo de lista. 
+
+Suas vantagens em relação às listas normais são que elas não tem espaço de memória predefinido e alinhado, elas podem crescer indefinidamente e de forma desorganizada com relação ao alinhamento de memória, são flexíveis, mas com o custo de terem de ser percorridas toda vez para se encontrar o elemento em dada posição, operação que tem um tempo de execução proporcional ao tamanho da lista, enquanto a lista normal faz isso de forma indexada, por isso é de tempo constante.
 
 \begin{figure}[ht]
 	\centering
@@ -167,7 +169,7 @@ Para implementações em C a lista é basicamente um conjunto de nós, que são 
 
 \subsection{Filas priorizadas}
 
-Filas priorizadas são como filas normais, listas onde o elemento a ser inserido é colocado a frente e retirado ao fim, ou seja, quem entra primeiro sai primeiro. A lista priorizada implementa a funcionalidade de inserir elementos baseado em uma medida de privilégio que pode ser um número arbitrário ou uma medida como tempo de vida, uma escala de erro e etc. Da mesma forma que na fila normal, elementos são retirados ao fim da fila.
+Filas priorizadas são como filas normais, listas onde o elemento a ser inserido é colocado a frente e retirado ao fim, ou seja, quem entra primeiro sai primeiro. A lista priorizada implementa a funcionalidade de inserir elementos baseados em uma medida de privilégio que pode ser um número arbitrário ou uma medida como tempo de vida, uma escala de erro, etc. Da mesma forma que na fila normal, elementos são retirados ao fim da fila.
 
 Podem ser implementados a partir de listas indexadas ou listas ligadas.
 
@@ -187,7 +189,7 @@ O processamento paralelo e concorrente são abordagens utilizadas para melhorar 
 
 Uma das formas de alcançar o processamento paralelo é por meio do uso de \textit{threads}. As \textit{threads} são unidades básicas de execução em um programa, representando fluxos independentes de controle que podem executar tarefas em paralelo. Uma aplicação pode conter várias \textit{threads}, permitindo a execução simultânea de diferentes partes do código. As \textit{threads} compartilham o mesmo espaço de memória, o que facilita a comunicação e a troca de dados entre elas.
 
-A execução concorrente de \textit{threads} também pode trazer desafios. Um problema comum é a ocorrência de \textit{race conditions}, que acontecem quando duas ou mais \textit{threads} acessam ou modificam uma região de memória ou variável compartilhada simultaneamente, resultando em comportamento imprevisível do programa. Isso ocorre quando as operações das \textit{threads} não são adequadamente sincronizadas, resultando em um conflito entre as operações concorrentes. Para evitar \textit{race conditions}, são utilizados mecanismos de sincronização, como \textit{mutex locks}, \textit{mutex locks} são mecanismos de exclusão mútua, onde uma \textit{thread} obtém um lock para bloquear o acesso de outras \textit{threads} a um recurso compartilhado até que seja liberado. Isso garante que apenas uma \textit{thread} possa acessar o recurso por vez, evitando \textit{race conditions}. Os \textit{mutex locks} são usados para proteger regiões críticas do código onde ocorrem operações compartilhadas, garantindo a consistência e prevenindo conflitos entre as \textit{threads}.
+A execução concorrente de \textit{threads} também pode trazer desafios. Um problema comum é a ocorrência de \textit{race conditions}, que acontecem quando duas ou mais \textit{threads} acessam ou modificam uma região de memória, ou variável compartilhada simultaneamente, resultando em comportamento imprevisível do programa. Isso ocorre quando as operações das \textit{threads} não são adequadamente sincronizadas, resultando em um conflito entre as operações concorrentes. Para evitar \textit{race conditions}, são utilizados mecanismos de sincronização, como \textit{mutex locks}, \textit{mutex locks} são mecanismos de exclusão mútua, onde uma \textit{thread} obtém um lock para bloquear o acesso de outras \textit{threads} a um recurso compartilhado até que seja liberado. Isso garante que apenas uma \textit{thread} possa acessar o recurso por vez, evitando \textit{race conditions}. Os \textit{mutex locks} são usados para proteger regiões críticas do código onde ocorrem operações compartilhadas, garantindo a consistência e prevenindo conflitos entre as \textit{threads}.
 
 \begin{figure}[ht]
 	\centering
@@ -203,9 +205,9 @@ Em utilização normal, quando um \textit{thread} precisa acessar um recurso pro
 
 A utilização de \textit{callbacks} é uma forma comum de comunicação entre dois \textit{threads} em programação concorrente. Um \textit{callback} é uma função ou bloco de código que é passado como argumento para outra função. Ao utilizar \textit{callbacks} para comunicação entre \textit{threads}, um \textit{thread} pode registrar um \textit{callback} que será acionado quando uma determinada condição for atendida ou quando algum evento específico ocorrer. Essa abordagem é particularmente útil em situações em que um \textit{thread} precisa notificar outro \textit{thread} sobre algo que aconteceu. Por exemplo, considere um cenário em que um \textit{thread} A está aguardando a conclusão de um processamento realizado pelo \textit{thread} B. Em vez de ficar bloqueado a execução, esperando o \textit{thread} B terminar, o \textit{thread} A pode registrar um \textit{callback} que será executado pelo \textit{thread} B assim que o processamento for concluído. Dessa forma, o \textit{thread} A pode continuar executando outras tarefas sem ficar preso esperando a finalização do \textit{thread} B.
 
-A utilização de \textit{callbacks} nesse contexto permite uma abordagem assíncrona de comunicação, na qual os \textit{threads} podem operar de forma independente e notificar uns aos outros quando necessário. Além disso, a flexibilidade dos \textit{callbacks} permite que o código de um \textit{thread} possa ser modificado ou estendido sem afetar diretamente o código do outro \textit{thread}, tornando o sistema mais modular e adaptável. No entanto, é importante considerar questões de sincronização e concorrência ao utilizar \textit{callbacks} entre \textit{threads}. Mecanismos adequados, como \textit{mutex locks} ou semáforos\footnote{Mecanismo de sincronização análogo a um semáforo de trânsito, onde só se executa código quando houver um "sinal verde", que é dado pelo outro ator de execução}, devem ser empregados para garantir a correta sincronização e evitar problemas de \textit{race conditions} ou acesso simultâneo a recursos compartilhados.
+A utilização de \textit{callbacks} nesse contexto permite uma abordagem assíncrona de comunicação, na qual os \textit{threads} podem operar de forma independente e notificar uns aos outros quando necessário. Além disso, a flexibilidade dos \textit{callbacks} permite que o código de um \textit{thread} possa ser modificado ou estendido sem afetar diretamente o código do outro \textit{thread}, tornando o sistema mais modular e adaptável. No entanto, é importante considerar questões de sincronização e concorrência ao utilizar \textit{callbacks} entre \textit{threads}. Mecanismos adequados, como \textit{mutex locks} ou semáforos\footnote{Mecanismo de sincronização análogo a um semáforo de trânsito, onde só se executa código quando houver um ``sinal verde'', que é dado pelo outro ator de execução}, devem ser empregados para garantir a correta sincronização e evitar problemas de \textit{race conditions} ou acesso simultâneo a recursos compartilhados.
 
-Tratando de implementações, mais específico em C, \textit{callback} são funções e tem formatos distintos, e geralmente são passados como ponteiros de função. Normalmente \textit{callbacks} são dados como funções genéricas que não retornam nada e recebem informações genérica usado \lstinline{void*}.
+Tratando de implementações, mais específico em C, \textit{callback} são funções e tem formatos distintos, e geralmente são passados como ponteiros de função. Normalmente \textit{callbacks} são dados como funções genéricas que não retornam nada e recebem também informações genéricas, usado \lstinline{void*}.
 
 \lstinputlisting[
 	language=C,
@@ -219,9 +221,9 @@ A implementação desses conceitos em C pode ser alcançada através da bibliote
 
 \subsection{Temporização}
 
-Temporizadores são um tópico interessante em si, pois em sistemas embarcados geralmente têm-se acesso a temporizadores de \textit{hardware}, que são precisos e fáceis de usar, porém para sistemas operacionais que não são de tempo real e não possuem temporizadores de \textit{hardware} disponíveis a nível de usuário, acabam se tornando um leve problema. A maneira como pode-se implementar um temporizador seria na criação de uma execução paralela/concorrente de código onde pode-se contar o tempo através de chamadas de função que retornam o tempo passado desde um ponto arbitrário, como a execução do sistema ou da própria aplicação, valor que pode ser impreciso em cima do fato de ainda estar sendo contado continuamente em uma rotina concorrente, que não é garantida de ser executada em tempo real. O resultado é que podemos alcançar timers com boa acurácia, na casa dos milissegundos, porém com baixa precisão, com bastante variação em torno do valor original de contagem.
+Temporizadores são um tópico interessante em si, pois em sistemas embarcados geralmente têm-se acesso a temporizadores de \textit{hardware}, que são precisos e fáceis de usar, porém, para sistemas operacionais que não são de tempo real e não possuem temporizadores de \textit{hardware} disponíveis a nível de usuário, acabam se tornando um leve problema. A maneira como pode-se implementar um temporizador seria na criação de uma execução paralela/concorrente de código onde pode-se contar o tempo através de chamadas de função que retornam o tempo passado desde um ponto arbitrário, como a execução do sistema ou da própria aplicação, valor que pode ser impreciso em cima do fato de ainda estar sendo contado continuamente em uma rotina concorrente, que não é garantida de ser executada em tempo real. O resultado é que podemos alcançar timers com boa acurácia, na casa dos milissegundos, porém com baixa precisão, com bastante variação em torno do valor original de contagem.
 
-A utilização de execução concorrente de código pelo uso de \textit{threads} recaí sobre a capacidades da maioria dos sistemas, sejam computadores pessoais ou sistemas embarcados, portanto trata-se de uma boa escolha para implementação genérica. Há ainda a possibilidade de se utilizar temporizadores de \textit{hardware} de forma condicional conforme a arquitetura envolvida, o que adiciona um grau de complexidade ao sistema de compilação e deve ser alterado pontualmente para cada sistema a ser suportado, portanto um boa escolha para projetos mais especializados e menos genéricos.
+A utilização de execução concorrente de código pelo uso de \textit{threads} recaí sobre a capacidades da maioria dos sistemas, sejam computadores pessoais ou sistemas embarcados, portanto trata-se de uma boa escolha para implementação genérica. Há ainda a possibilidade de se utilizar temporizadores de \textit{hardware} de forma condicional conforme a arquitetura envolvida, o que adiciona um grau de complexidade ao sistema de compilação e deve ser alterado pontualmente para cada sistema a ser suportado, portanto, uma boa escolha para projetos mais especializados e menos genéricos.
 
 Para realizar a medição utiliza se a função \lstinline{clock} da biblioteca padrão C. Essa função retorna o tempo de CPU decorrido desde o início do programa em ciclos de \textit{clock}, que podem ser convertidos em unidades de tempo, como milissegundos. A função \lstinline{clock} oferece uma forma padronizada de obter-se a temporização, independentemente do sistema operacional, garantindo maior portabilidade e precisão, no entanto, é importante ressaltar que a função \lstinline{clock} mede o tempo de CPU decorrido e não segue de fato o tempo real.
 
@@ -239,9 +241,9 @@ A utilização normalmente recai sobre o paradigma de obter se o tempo inicial e
 
 \subsection{IEC 61131-3}
 
-A norma IEC 61131-3 \cite{IEC611313} é um padrão internacional amplamente utilizado para a programação de controladores lógicos programáveis (PLCs) e sistemas de automação industrial. Ela foi desenvolvida pela Comissão Eletrotécnica Internacional (International Electrotechnical Commission - IEC) e define uma linguagem comum e um ambiente de programação para PLCs.
+A norma IEC 61131-3 \cite{IEC611313} é um padrão internacional amplamente utilizado para a programação de controladores lógicos programáveis (PLCs) e sistemas de automação industrial. Ela foi desenvolvida pela Comissão Eletrotécnica Internacional (\textit{International Electrotechnical Commission} - IEC) e define uma linguagem comum e um ambiente de programação para PLCs.
 
-Uma das principais características da norma IEC 61131-3 é a definição de cinco linguagens de programação padronizadas para PLCs. Essas linguagens são: diagrama de contatos (LD - Ladder Diagram), lista de instruções (IL - Instruction List), texto estruturado (ST - Structured Text), diagrama de blocos de função (FBD - Function Block Diagram) e gráfico sequencial (SFC - Sequential Function Chart). Cada linguagem tem sua própria sintaxe e semântica, permitindo aos programadores escolher a linguagem mais adequada para a tarefa em questão.
+Uma das principais características da norma IEC 61131-3 é a definição de cinco linguagens de programação padronizadas para PLCs. Essas linguagens são: diagrama de contatos (\textit{LD - Ladder Diagram}), lista de instruções (\textit{IL - Instruction List}), texto estruturado (\textit{ST - Structured Text}), diagrama de blocos de função (\textit{FBD - Function Block Diagram}) e gráfico sequencial (\textit{SFC - Sequential Function Chart}). Cada linguagem tem sua própria sintaxe e semântica, permitindo aos programadores escolher a linguagem mais adequada para a tarefa em questão.
 
 Além das linguagens de programação, a norma IEC 61131-3 também estabelece diretrizes para a organização e estruturação de programas PLC, o uso de variáveis, a manipulação de tempo, a comunicação com dispositivos externos e a interface com o \textit{hardware} do PLC. Essas diretrizes garantem a interoperabilidade entre diferentes PLCs e facilitam a portabilidade de programas entre diferentes sistemas.
 
@@ -251,23 +253,17 @@ A norma também aborda aspectos relacionados à segurança funcional, especifica
 
 \subsection{Lista de instrução}
 
-Uma das linguagem padronizadas para programação de PLC's é a lista de instrução que consiste em uma sequência de instruções que especificam as operações a serem executadas pelo PLC, afim de controlar o comportamento do sistema desejado. Dentre os comandos mais comuns presentes destacam-se o \lstinline{LD} (Load), \lstinline{OUT} (Output), \lstinline{SET}, \lstinline{AND} e os relacionados a bordas de subida e descida, temporizadores e aos comandos de \lstinline{MPS} (Master Program Select), \lstinline{MRD} (Master \textit{Reset} Display) e \lstinline{MPP} (Master Program Present).
+Uma das linguagens padronizadas para programação de PLC's é a lista de instrução \cite{IEC11313}, que consiste em uma sequência de instruções que especificam as operações a serem executadas pelo PLC afim de controlar o comportamento do sistema desejado. Dentre os comandos mais comuns presentes destacam-se o \lstinline{LD} (Load), \lstinline{ST} (Store), \lstinline{S}, \lstinline{AND} dentre outros.
 
 O comando \lstinline{LD} (Load) é utilizado para carregar um valor ou estado lógico em uma variável interna ou memória do PLC. Essa instrução é fundamental para a atribuição de valores a variáveis e para a leitura de entradas do sistema.
 
-O comando \lstinline{OUT} (Output) é responsável por escrever um valor lógico em uma saída específica do PLC. Ele controla a ativação ou desativação de dispositivos externos conectados ao sistema automatizado.
+O comando \lstinline{ST} (Store) é responsável por escrever um valor lógico em uma memória, geralmente uma memória interna ou saída do PLC. Caso referencie uma saída, irá se controlar a ativação ou desativação de dispositivos externos.
 
-O comando \lstinline{SET} é utilizado para definir um estado lógico específico em variáveis internas do PLC. Esse comando é útil para inicializar variáveis ou para acionar estados específicos em situações de controle.
+O comando \lstinline{S} é utilizado para definir um estado lógico específico em variáveis internas do PLC. Esse comando é útil para inicializar variáveis ou para acionar estados específicos em situações de controle. Diferente do comando \lstinline{ST}, esta instrução apenas grava o valor lógico ``verdadeiro'' em uma variável, permanecendo assim até seja alterado por outra instrução.
 
-O comando \lstinline{AND} realiza a operação lógica "e" entre dois ou mais valores. Ele permite realizar condições de controle mais complexas ao combinar múltiplas entradas.
+O comando \lstinline{AND} realiza a operação lógica ``e'' entre dois ou mais valores. Ele permite realizar condições de controle mais complexas ao combinar múltiplas entradas.
 
-Além desses comandos, as bordas de subida, \lstinline{LDP}, e descida \lstinline{LDF}, são utilizadas para controlar a ocorrência de eventos específicos no sistema. As bordas de subida são acionadas quando um sinal lógico muda de zero para um, enquanto as bordas de descida são acionadas quando o sinal lógico muda de um para zero. Essas bordas são fundamentais para a detecção de transições e acionamento de ações em tempo real.
-
-Já os temporizadores são componentes essenciais na programação de controladores lógicos programáveis. Eles permitem a criação de atrasos programados e temporizações precisas, sendo utilizados para controlar o tempo de espera entre eventos e para executar ações em momentos específicos. Os temporizadores podem ser configurados para atrasos fixos ou variáveis, dependendo das necessidades do sistema.
-
-Por fim, os comandos \lstinline{MPS} (Memory push), inserir em memória, \lstinline{MRD} (Memory read), ler da memória, e \lstinline{MPP} (Memory pop), retirar da memória, são utilizados em sistemas com múltiplos saídas. O comando funciona basicamente como uma pilha, onde o resultado de uma operação pode ser inserido com (\lstinline{MPS}), re lido quantas vezes forem necessárias com (\lstinline{MRD}) e por fim lido a última vez enquanto ao mesmo tempo se remove da pilha, (\lstinline{MPP}). Esses comandos são importantes para a coordenação e controle de programas em sistemas complexos, pois possibilitam atrelar várias saídas a um mesmo conjunto de condições.
-
-Estes comandos basicamente dão ordem de execução a um programa, toda seção de execução é feita primeiramente carregando um valor (\lstinline{LD}), usando o para alguma lógica, e or fim direcionando o resultado para uma saída, como por exemplo \lstinline{OUT}, \lstinline{RST} ou comandos como \lstinline{MOV} e \lstinline{ADD}. 
+Estes comandos basicamente dão ordem de execução a um programa. Um programa é formado por seções, cada seção de execução individualmente e em ordem sequencial. Para cada seção, é primeiramente carregado um valor, usando por exemplo \lstinline{LD}, seguido então por alguma lógica, e por fim direcionando o resultado para uma memória interna ou saída física, usando por exemplo \lstinline{ST} ou \lstinline{S}.
 
 Um exemplo de seção seria abrir uma variável e escrever seu valor em uma saída.
 
@@ -276,56 +272,50 @@ Um exemplo de seção seria abrir uma variável e escrever seu valor em uma saí
 	caption={Seção de entrada e saída em lista de instrução},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=61,
-	lastline=62,
-	label=code:il0
-]{code/il.txt}
+	firstline=1,
+	lastline=2,
+	label=code:iliec
+]{code/iliec.txt}
 
-Ou em várias usando \lstinline{MPS}, \lstinline{MRD} e \lstinline{MPP}.
+\subsection{Referência WEG TPW04}
 
-\lstinputlisting[
-	language=C,
-	caption={Seção de entrada com multiplas saída em lista de instrução},
-	sourcePrefix={Fonte: },
-	source={Do autor.},
-	firstline=64,
-	lastline=70,
-	label=code:ilmultiple
-]{code/il.txt}
+A definição de lista de instrução é padronizada, porém, fabricantes optam por realizar implementações que abrangem a norma em grande parte, mas que por vezes apresentam diferenças e particularidades. Da empresa WEG, o modelo de PLC TPW04 \cite{wegtpw04}, pode apresentar algumas diferenças em relação à definição da norma IEC 61131-3. Essas diferenças podem ocorrer devido a recursos específicos do PLC como otimizações de desempenho ou necessidades específicas do ambiente de automação em que o TPW04 é utilizado. É importante ressaltar que as diferenças podem variar dependendo da versão do firmware do TPW04. Aqui estão algumas possíveis diferenças.
 
-\subsection{Lista de instrução e Ladder}
+\begin{itemize}
+	\item Conjunto de Instruções: O TPW04 pode ter um conjunto de instruções específico que vai além das instruções definidas na norma IEC 61131-3. A WEG pode adicionar instruções adicionais para atender a requisitos específicos do PLC ou para fornecer recursos extras aos programadores.
 
-Uma das características da programação de PLC's é que pelo padrão IEC 61161-3, plataforma de programação de desses PLC's implementam um conjunto dessas linguagens, sendo mais usuais a linguagem Ladder e de lista de instrução, e normalmente também fabricantes dão a habilidade aos programadores de alterar em tempo real entre as linguagens, isso é possível pois todas são relativamente simples e normalmente podem ser traduzidas a partir da lista de instrução.
+	\item Sintaxe e Semântica: Embora o TPW04 siga os conceitos e princípios gerais da norma IEC 61131-3, pode haver diferenças sutis na sintaxe e nomenclatura das instruções. Essas diferenças podem ser introduzidas para simplificar a programação ou otimizar o desempenho do PLC.
 
-Assim, contanto que se tenha um método de tradução de uma dada linguagem para lista de instrução e vice-versa, há possibilidade do fabricante implementar essas tradução em tempo real.
+	\item Recursos Específicos: O TPW04 pode oferecer recursos específicos que não estão incluídos na norma IEC 61131-3. Isso pode incluir recursos avançados de temporização, contadores específicos, funções de comunicação específicas ou suporte para dispositivos periféricos exclusivos da WEG.
+\end{itemize}
 
-A linguagem Ladder em especial é um ótimo candidato pois as operações mais básicas são facilmente mapeadas. No exemplo da figura \ref{fig:illadder}, temos um simples programa de PLC, onde pode-se observar um exemplo de implementação da relação entre as linguagem Ladder e lista de instrução. Observa-se que para as ramificações Ladder de entrada, utilizamos somente operações lógicas, uma operação lógica "ou" e outra "e, negada", assim, para entradas, a maior parte dos casos será uma expressão lógica em termos das entradas.
+Para a referência WEG, existem algumas extensões e renomeações dos comandos definidos pela norma. Um exemplo de instrução específica WEG para o TPW04 seriam as bordas de subida, \lstinline{LDP}, e descida \lstinline{LDF}, que são utilizadas para controlar a ocorrência de eventos específicos no sistema. As bordas de subida são acionadas quando um sinal lógico muda de zero para um, enquanto as bordas de descida são acionadas quando o sinal lógico muda de um para zero. Essas bordas são fundamentais para a detecção de transições e acionamento de ações em tempo real.
+
+Também há temporizadores, que são componentes essenciais na programação de controladores lógicos programáveis. Eles permitem a criação de atrasos programados e temporizações precisas, sendo utilizados para controlar o tempo de espera entre eventos e para executar ações em momentos específicos. Os temporizadores podem ser configurados para atrasos fixos ou variáveis, dependendo das necessidades do sistema.
+
+Por fim temos alguns comandos que são de extrema importância, pois possibilitam a reutilização de uma mesma computação várias vezes, os comandos \lstinline{MPS} (Memory push), inserir em memória, \lstinline{MRD} (Memory read), ler da memória, e \lstinline{MPP} (Memory pop), retirar da memória. Os comandos funcionam basicamente como uma pilha, onde o resultado de uma operação pode ser inserido com (\lstinline{MPS}), re-lido quantas vezes forem necessárias com (\lstinline{MRD}), e por fim lido a última vez, ao mesmo tempo que é retirado da pilha, (\lstinline{MPP}). Esses comandos são importantes para a coordenação e controle de programas em sistemas complexos, pois possibilitam atrelar várias saídas a um mesmo conjunto de condições.
+
+Como este projeto visa a implementação prática para com o modelo TPW04, está será a referência a ser seguida para o desenvolvimento do compilador, respeitando as instruções específicas WEG, porém tentando utilizar as instruções mais triviais e gerais de forma a facilitar futuras adaptações para outras referências de outros modelos e fabricantes.
+
+\subsection{Lista de instrução e \textit{Ladder}}
+
+Uma das características da programação de PLC's é que pelo padrão IEC 61161-3, plataforma de programação de desses PLC's implementam um conjunto dessas linguagens, sendo mais usuais a linguagem \textit{Ladder} e de lista de instrução, e normalmente também fabricantes dão a habilidade aos programadores de alterar em tempo real entre as linguagens, isso é possível, pois todas são relativamente simples e normalmente podem ser traduzidas a partir da lista de instrução.
+
+Assim, contanto que se tenha um método de tradução de uma dada linguagem para lista de instrução e vice-versa, há possibilidade do fabricante implementar essa tradução em tempo real.
+
+A linguagem \textit{Ladder} em especial é um ótimo candidato, pois as operações mais básicas são facilmente mapeadas. No exemplo da figura \ref{fig:illadder}, temos um simples programa de PLC, onde pode-se observar um exemplo de implementação da relação entre as linguagem \textit{Ladder} e lista de instrução. Observa-se que para as ramificações \textit{Ladder} de entrada, utilizamos somente operações lógicas, uma operação lógica ``ou'' e outra ``e, negada'', assim, para entradas, a maior parte dos casos será uma expressão lógica em termos das entradas.
 
 Para saída iremos utilizar as instruções de memória, inserindo o valor após a última operação lógica e depois lendo até a última entrada, onde o valor é retirado e a declaração do programa termina.
 
 \begin{figure}[ht]
 	\centering
-	\caption{Exemplo tradução de lista de instrução e Ladder}
+	\caption{Exemplo de tradução entre \textit{Ladder} e lista de instrução referência WEG TPW04}
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/illadder}\\
 	\label{fig:illadder}
 \end{figure}
 
-Podem haver outras implementações e variações desta apresentada, porém serve de ilustração para a capacidade de se converter entre as linguagens, provando em torno também que quando se tem um programa em lista de instrução, podemos facilmente alcançar outros paradigmas e linguagens, se tornando um ótimo alvo base para compilação de programas.
-
-\subsection{Referência WEG TPW04}
-
-A definição de lista de instrução é padronizada, porém, fabricantes optam por realizar implementações que abrangem a norma em grande parte mas que por vezes apresentam diferenças e particularidades. Da empresa WEG, o modelo de PLC TPW04 \cite{wegtpw04},pode apresentar algumas diferenças em relação à definição da norma IEC 61131-3. Essas diferenças podem ocorrer devido a recursos específicos do CLP como otimizações de desempenho ou necessidades específicas do ambiente de automação em que o TPW04 é utilizado. É importante ressaltar que as diferenças podem variar dependendo da versão do firmware do TPW04. Aqui estão algumas possíveis diferenças.
-
-\begin{itemize}
-	\item Conjunto de Instruções: O TPW04 pode ter um conjunto de instruções específico que vai além das instruções definidas na norma IEC 61131-3. A WEG pode adicionar instruções adicionais para atender a requisitos específicos do CLP ou para fornecer recursos extras aos programadores.
-
-	\item Sintaxe e Semântica: Embora o TPW04 siga os conceitos e princípios gerais da norma IEC 61131-3, pode haver diferenças sutis na sintaxe e nomenclatura das instruções. Essas diferenças podem ser introduzidas para simplificar a programação ou otimizar o desempenho do CLP.
-
-	\item Recursos Específicos: O TPW04 pode oferecer recursos específicos que não estão incluídos na norma IEC 61131-3. Isso pode incluir recursos avançados de temporização, contadores específicos, funções de comunicação específicas ou suporte para dispositivos periféricos exclusivos da WEG.
-\end{itemize}
-
-Como este projeto visa a implementação prática para com o modelo TPW04, está será a referência a ser seguida para o desenvolvimento do compilador, respeitando as instruções específicas WEG, porém tentando utilizar as instruções mais triviais e gerais de forma a facilitar futuras adaptações para outras referências de outros modelos e fabricantes.
+Podem haver outras implementações e variações desta apresentada, porém, serve de ilustração para a capacidade de se converter entre as linguagens, provando em torno também que quando se tem um programa em lista de instrução, podemos facilmente alcançar outros paradigmas e linguagens, se tornando um ótimo alvo base para compilação de programas.
 
 % \section{Aplicação gráfica}
 

@@ -1,8 +1,9 @@
 \chapter{Desenvolvimento}
+\input{sections/metodologia.tex}
 
-Começando pela base, é desenvolvido primeiramente a biblioteca em C, onde serão definidos a estrutura, checagem, serialização e armazenamento e dinâmica/simulação da rede, que irão compor a biblioteca e permitir que ela seja de uso genérico conforme a especificação. 
+% Começando pela base, é desenvolvido primeiramente a biblioteca em C, onde serão definidos a estrutura, checagem, serialização e armazenamento e dinâmica/simulação da rede, que irão compor a biblioteca e permitir que ela seja de uso genérico conforme a especificação. 
 
-Ao fim será desenvolvido o algoritmo que se utilizará da estrutura de dados da rede petri para realizar a compilação para lista de instrução, referência WEG TPW04 \cite{wegtpw04}.
+% Ao fim será desenvolvido o algoritmo que se utilizará da estrutura de dados da rede petri para realizar a compilação para lista de instrução, referência WEG TPW04 \cite{wegtpw04}.
 
 \section{Biblioteca C}
 
@@ -74,7 +75,7 @@ $$ A_r =
 \end{bmatrix}
 $$
 
-Tendo já os arcos podemos agora definir o estado inicial da rede de petri, que são as fichas iniciais que alguns lugares possuem conforme o design do autor da rede. É relativamente simples, apenas uma matriz unidimensional com os valores para cada lugar. Exemplo de lugar inicial de um de três lugares.
+Tendo já os arcos, podemos agora definir o estado inicial da rede de petri, que são as fichas iniciais que alguns lugares possuem conforme o design do autor da rede. É relativamente simples, apenas uma matriz unidimensional com os valores para cada lugar. Exemplo de lugar inicial de um de três lugares.
 
 $$
 P_i = 
@@ -92,7 +93,7 @@ T =
 \end{bmatrix}
 $$
 
-Para as entradas da rede define-se, como nos arcos, uma matriz de relação entre entradas e transições. Assim define-se uma matriz de $n$ linhas, as entradas, por $m$ colunas, as transições, e também deve se definir uma forma de codificar em um número inteiro, devido a implementação da matriz, o tipo de evento a ser usado, para isso define-se uma enumerador C com as três possíveis bordas propostas, de subida, descida e ambas.
+Para as entradas da rede define-se, como nos arcos, uma matriz de relação entre entradas e transições. Assim define-se uma matriz de $n$ linhas, as entradas, por $m$ colunas, as transições, e também deve se definir uma forma de codificar em um número inteiro, devido à implementação da matriz, o tipo de evento a ser usado, para isso define-se um enumerador C com as três possíveis bordas propostas, de subida, descida e ambas.
 
 \lstinputlisting[
 	language=C,
@@ -102,7 +103,7 @@ Para as entradas da rede define-se, como nos arcos, uma matriz de relação entr
 	label=code:event
 ]{code/event.c}
 
-Observa-se que definimos também um evento nulo, zero, que simboliza nenhuma relação, e um evento \lstinline{max}, que tem como função apenas a checagem, que será vista mais a frente. Note também como a borda de ambos, \lstinline{any_edge}, é a soma do valor das outras duas bordas, assim que utilizar a biblioteca para criação de redes de petri pode utilizar do operador lógico "ou" para indicar verbosamente ambas as bordas, \lstinline{pnet_event_any_edge = pnet_event_pos_edge | pnet_event_neg_edge}.
+Observa-se que definimos também um evento nulo, zero, que simboliza nenhuma relação, e um evento \lstinline{max}, que tem como função apenas a checagem, que será vista mais a frente. Note também como a borda de ambos, \lstinline{any_edge}, é a soma do valor das outras duas bordas, assim que utilizar a biblioteca para criação de redes de petri pode utilizar do operador lógico ``ou'' para indicar verbosamente ambas as bordas, \lstinline{pnet_event_any_edge = pnet_event_pos_edge | pnet_event_neg_edge}.
 
 Um exemplo de matriz onde deseja-se que a transição um seja acionada somente quando haja uma borda de subida da entrada dois.
 
@@ -114,7 +115,7 @@ I_{in} =
 \end{bmatrix}
 $$
 
-As saídas são definidas como a quantidade de fichas maior ou igual necessárias a ativação, portanto nenhuma codificação é necessária, apenas o valor numérico, assim tempos uma matriz de $n$ linhas, lugares, or $m$ colunas, saídas. Um exemplo caso desejarmos que a saída um seja acionada quando o número e fichas no lugar três seja maior ou igual a quatro.
+As saídas são definidas como a quantidade de fichas maior ou igual necessárias a ativação, portanto nenhuma codificação é necessária, apenas o valor numérico, assim tempos uma matriz de $n$ linhas, lugares, or $m$ colunas, saídas. Um exemplo caso desejarmos que a saída um seja acionada quando o número de fichas no lugar três seja maior ou igual a quatro.
 
 $$
 O_{out} = 
@@ -217,7 +218,7 @@ Dado uma rede petri válida, para que antes de a executarmos em tempo real, prec
 	label=code:sense
 ]{code/sense.c}
 
-Na implementação primeiramente dizemos que, para determinada transição, ela se encontra sensibilizada por padrão, então verificamos se existem as matrizes dos arcos de condição e para cada tipo de arco, se existe relação entre o lugar e transição atual, e ainda, se o lugar possui a condição necessária, seja de fichas necessárias para o arcos de peso negativo ou zero fichas para o arco negado. Chegando ao final de todas as das condições, se algo não for verdadeiro a transição será marcada como não sensibilizada.
+Na implementação primeiramente dizemos que, para determinada transição, ela se encontra sensibilizada por padrão, então verificamos se existem as matrizes dos arcos de condição e para cada tipo de arco, se existe relação entre o lugar e transição atual, e ainda, se o lugar possui a condição necessária, seja de fichas necessárias para os arcos de peso negativo ou zero fichas para o arco negado. Chegando ao final de todas as das condições, se algo não for verdadeiro, a transição será marcada como não sensibilizada.
 
 Note que a matriz das transições \lstinline{sensitive_trasitions} é interna a rede de petri e que a cada verificação de sensibilidade retorna várias transições sensibilizadas, que está em contradição com nossa especificação da seção \ref{section:limitations}, porém será tratada posteriormente na realização de disparos.   
 
@@ -227,7 +228,7 @@ O ponto de entrada para realização análise de sensibilização será uma fun�
 
 Dada uma matriz com as transições a serem sensibilizadas é necessário ainda verificar se as transições possuem relação de entrada, caso no qual deverá ser feita uma verificação das bordas de entrada. A verificação das bordas de entrada é feita comparando se o valor atual é diferente do anterior, para isso é necessário guardar o estado anterior das entradas, seria a matriz \lstinline{inputs_last} dada no código \ref{code:pnet}.
 
-O ponto de entrada para realização dos disparos será uma função distinta denominada \lstinline{pnet_fire}, a qual dentro si realiza uma chamada a função \lstinline{pnet_sense}, incorporando assim a lógica completa de disparos, exceto pelos disparos temporizados, que irão ocorrer de forma assíncrona, discutidos na próxima seção. Na função \lstinline{pnet_fire}, também é repassado o valor atual das entradas externas, assim pode-se verificar se houve mudança e portanto se houver um evento, uma borda, e se o evento irá contribuir para o disparo de alguma transição. Para isso verifica-se a entrada com o estado anterior e armazena se o resultado na matriz temporária \lstinline{edges}. 
+O ponto de entrada para realização dos disparos será uma função distinta denominada \lstinline{pnet_fire}, a qual dentro si realiza uma chamada a função \lstinline{pnet_sense}, incorporando assim a lógica completa de disparos, exceto pelos disparos temporizados, que irão ocorrer de forma assíncrona, discutidos na próxima seção. Na função \lstinline{pnet_fire}, também é repassado o valor atual das entradas externas, assim pode-se verificar se houve mudança e portanto, se houver um evento ou uma borda, e se o evento irá contribuir para o disparo de alguma transição. Para isso verifica-se a entrada com o estado anterior e armazena se o resultado na matriz temporária \lstinline{edges}. 
 
 \lstinputlisting[
 	language=C,
@@ -237,7 +238,7 @@ O ponto de entrada para realização dos disparos será uma função distinta de
 	label=code:input
 ]{code/input.c}
 
-Primeiramente para cada transição, se assume que ela está sensibilizada, então se verifica-se para cada uma se existe um mapa de entrada, caso não ela permanece sensibilizada, caso não, verifica-se se a mesma possui um evento nulo atrelado, caso qual pulamos e a transição continua sensibilizada, caso contrário, se a borda for a mesma especificada pela matriz de entrada então a mesma continua sensibilizada. Caso nenhuma dessas condições não for verdadeira, a transição é marcada como dessensibilizada.   
+Primeiramente para cada transição, se assume que ela está sensibilizada, então se verifica para cada uma se existe um mapa de entrada, caso não ela permanece sensibilizada, caso não, verifica-se se a mesma possui um evento nulo atrelado, caso qual pulamos e a transição continua sensibilizada, caso contrário, se a borda for a mesma especificada pela matriz de entrada então a mesma continua sensibilizada. Caso nenhuma dessas condições não for verdadeira, a transição é marcada como dessensibilizada.   
 
 \lstinputlisting[
 	language=C,
@@ -247,9 +248,9 @@ Primeiramente para cada transição, se assume que ela está sensibilizada, ent�
 	label=code:inputtran
 ]{code/input_tran.c}
 
-É interessante notar como no código \ref{code:event}, as bordas de subida e descida são distintas mas a borda ambos é a soma do valor delas, basta realizar a operação lógica "e" para poder determinar o resultado, se o valor da matriz de entrada for igual ao detectado, então "e" será verdadeiro, e se o valor da matriz for para ambos, se a detectada for por exemplo de subida, então teremos \lstinline{0x03 & 0x01}, que será também verdadeiro, como pode ser visto na linha 21 do código \ref{code:inputtran}.
+É interessante notar como no código \ref{code:event}, as bordas de subida e descida são distintas, mas a borda ambos é a soma do valor delas, basta realizar a operação lógica ``e'' para poder determinar o resultado, se o valor da matriz de entrada for igual ao detectado, então ``e'' será verdadeiro, e se o valor da matriz for para ambos, se a detectada for, por exemplo, de subida, então teremos \lstinline{0x03 & 0x01}, que será também verdadeiro, como pode ser visto na linha 21 do código \ref{code:inputtran}.
 
-Tendo agora duas matrizes, a matriz de transições sensibilizadas pelos arcos condicionais e a matriz de transições sensibilizadas pelas entradas, portanto as transições que devem ser disparadas serão o resultado lógico "e" de ambas as matrizes.
+Tendo agora duas matrizes, a matriz de transições sensibilizadas pelos arcos condicionais e a matriz de transições sensibilizadas pelas entradas, portanto as transições que devem ser disparadas serão o resultado lógico ``e'' de ambas as matrizes.
 
 \lstinputlisting[
 	language=C,
@@ -259,7 +260,7 @@ Tendo agora duas matrizes, a matriz de transições sensibilizadas pelos arcos c
 	label=code:fire
 ]{code/fire.c}
 
-No código \ref{code:fire} linha 2 vemos a operação lógica "e", e temos então a matriz de transições para executar, porém, conforme mencionado na seção \ref{section:limitations}, destas, podemos executar ao máximo uma transição, então a partir do momento que temos uma transição não temporizada que está apta, esta será executada e o irá quebrar o laço de repetição, assim outras transições não serão executadas. Aqui vê se a ambiguidade de que a primeira transição que for declara tem prioridade, devido ao laço de repetição, essa é a justificativa para implementação de prioridade de transições, que vem do tipo de rede de petri priorizada, porém, novamente, a escolha deste tipo de implementação é justificada pela finalidade de aplicação, assumindo que esse tipo de ambiguidade não será de grande problema. 
+No código \ref{code:fire} linha 2 vemos a operação lógica ``e'', e temos então a matriz de transições para executar, porém, conforme mencionado na seção \ref{section:limitations}, destas, podemos executar ao máximo uma transição, então a partir do momento que temos uma transição não temporizada que está apta, esta será executada e o irá quebrar o laço de repetição, assim outras transições não serão executadas. Aqui vê se a ambiguidade de que a primeira transição que for declara tem prioridade, devido ao laço de repetição, essa é a justificativa para implementação de prioridade de transições, que vem do tipo de rede de petri priorizada, porém, novamente, a escolha deste tipo de implementação é justificada pela finalidade de aplicação, assumindo que esse tipo de ambiguidade não será de grande problema. 
 
 A função \lstinline{pnet_move} realiza a movimentação das fichas conforme os arcos atuadores, os arcos de peso negativo e positivo e o arco \textit{reset}, a forma como a movimentação é alcançada pode ser dada em termos matemáticos, para os arcos de peso, de uma única matriz $A$ com arcos positivos e negativos, e uma matriz $T$ que representa a transição a ser disparada, o resultado da movimentação das fichas pode ser dado como: 
 
@@ -275,7 +276,7 @@ $$
 
 Onde $a$ é uma célula, $m$ o índice da coluna, $A^T$ a transposta de, $P$ a matriz dos lugares atuais e $P_n$ os novos lugares após o disparo.
 
-Esse algoritmo funciona de forma adequada, exceto pelo fato da multiplicação matricial ser extremamente custosa para grandes matrizes. Como sabe-se o tipo de matriz que temos, podemos começar extraindo a coluna da matriz de arcos que representa a única transição a ser disparada, diminuindo drasticamente o cálculo envolvido. Com essa nova matriz unidimensional, pode-se simplesmente realizar a soma diretamente aos lugares da rede de petri. 
+Esse algoritmo funciona de forma adequada, exceto pelo fato da multiplicação matricial ser extremamente custosa para grandes matrizes. Como se sabe o tipo de matriz que temos, podemos começar extraindo a coluna da matriz de arcos que representa a única transição a ser disparada, diminuindo drasticamente o cálculo envolvido. Com essa nova matriz unidimensional, pode-se simplesmente realizar a soma diretamente aos lugares da rede de petri. 
 
 Para a implementação desse trabalho necessitamos primeiramente extrair as colunas da matriz de arcos positiva e negativa e então realizar a soma.
 
@@ -301,11 +302,11 @@ Onde $a_n$ são a coluna transição dos arcos negativos, $p$ positivos e $r$ de
 
 \subsection{Temporização e assincronia}
 
-Nota-se que no código \ref{code:fire} que a transição só é de fato disparada caso não haja matriz de temporização ou quando a temporização para a mesma for zero, porém quando há temporização, a mesma deve iniciar o processo de contagem juntamente com outras transições que possam começar a contar, isso pelo fato de que o inicio da contagem pode ocorrer de forma simultânea, somente o disparo das transições deve ser único, comportamento que pode-se tornar complexo, para tanto deve se visionar um sistema de contagem que garanta o mesmo.
+Nota-se que no código \ref{code:fire} que a transição só é de fato disparada caso não haja matriz de temporização ou quando a temporização para a mesma for zero, porém quando há temporização, a mesma deve iniciar o processo de contagem juntamente com outras transições que possam começar a contar, isso pelo fato de que o início da contagem pode ocorrer de forma simultânea, somente o disparo das transições deve ser único, comportamento que pode-se tornar complexo, para tanto deve se visionar um sistema de contagem que garanta o mesmo.
 
-Dentro deste \textit{thread} código erá executado para efetuar a contagem das transições temporizadas quando forem sensibilizadas, porém como visto, isso pode levar a situações onde podem haver múltiplas transições simultâneas. Para lidar com esse aspecto e facilitar a organização e contagem destas transições, é implementado uma estrutura de dados específica, uma fila priorizada. 
+Dentro deste \textit{thread} código erá executado para efetuar a contagem das transições temporizadas quando forem sensibilizadas, porém, como visto, isso pode levar a situações onde podem haver múltiplas transições simultâneas. Para lidar com esse aspecto e facilitar a organização e contagem destas transições, é implementado uma estrutura de dados específica, uma fila priorizada. 
 
-A implementação da fila é feita da seguinte forma, uma lista ligada que guarda elementos especiais, responsáveis pela metainformação de cada transição temporizada, e que trabalha a inserção e retirada dos elementos conforme a prioridade da contagem atual, de forma que os elementos com menor quantidade de tempo restante fiquem ao fim da lista, pois tem maior prioridade, assim podemos apenas verificar o último elemento da lista para saber se o mesmo deve ser disparado ou não, sem necessidade de checar o restantes dos elementos.
+A implementação da fila é feita da seguinte forma, uma lista ligada que guarda elementos especiais, responsáveis pela metainformação de cada transição temporizada, e que trabalha a inserção e retirada dos elementos conforme a prioridade da contagem atual, de forma que os elementos com menor quantidade de tempo restante fiquem ao fim da lista, pois tem maior prioridade, assim podemos apenas verificar o último elemento da lista para saber se o mesmo deve ser disparado ou não, sem necessidade de checar o restante dos elementos.
 
 Os elementos da lista ligada são transições, que são da seguinte forma:
 
@@ -317,7 +318,7 @@ Os elementos da lista ligada são transições, que são da seguinte forma:
 	label=code:transition
 ]{code/transition.c}
 
-Onde guardam-se o número da transição, o tempo inicial $t_0$ onde a transição foi ativada e o tempo total de temporização $t$. Para realizar a inserção na lista teremos uma função \lstinline{transition_queue_push}, qual insere os elementos de menor $t_0 + t$.
+Onde guarda-se o número da transição, o tempo inicial $t_0$ onde a transição foi ativada e o tempo total de temporização $t$. Para realizar a inserção na lista teremos uma função \lstinline{transition_queue_push}, qual insere os elementos de menor $t_0 + t$.
 
 \lstinputlisting[
 	language=C,
@@ -327,11 +328,11 @@ Onde guardam-se o número da transição, o tempo inicial $t_0$ onde a transiç�
 	label=code:transition
 ]{code/transition.c}
 
-Percorre-se a lista com um laço de repetição começando-se ao final, onde estão as transições mais próximas de executar, de volta ao inicio. Verifica-se então se a transição já está presente na lista, se sim retornar da chamada pois não há necessidade de inserção. Se o tempo final $t_0 + t$ for menor que o da transição atual, inserir o elemento a frente daquela transição, e caso se chegar ao inicio da lista sem que não seja inserido nada, inserir ao inicio da lista como a transição mais longe de ser executada. Tal processo é assegurado pelo uso de um \lstinline{mutex} definido para a instância da lista, evitando possíveis erros por \textit{race conditions}.
+Percorre-se a lista com um laço de repetição, começando ao final, onde estão as transições mais próximas de executar, em direção ao início. Verifica-se então se a transição já está presente na lista, se sim retornar da chamada, pois não há necessidade de inserção. Se o tempo final $t_0 + t$ for menor que o da transição atual, inserir o elemento a frente daquela transição, e caso se chegar ao início da lista sem que não seja inserido nada, inserir ao início da lista como a transição mais longe de ser executada. Tal processo é assegurado pelo uso de um \lstinline{mutex} definido para a instância da lista, evitando possíveis erros por \textit{race conditions}.
 
 Essa chamada foi usada no código \ref{code:fire} linha 21, onde verifica-se que a inserção é realizada para quantas transições forem sensibilizadas naquele momento.
 
-Para retirada do transição da lista implementa-se a chamada \lstinline{transition_queue_pop}, que é definida como:
+Para retirada da transição da lista implementa-se a chamada \lstinline{transition_queue_pop}, que é definida como:
 
 \lstinputlisting[
 	language=C,
@@ -341,9 +342,9 @@ Para retirada do transição da lista implementa-se a chamada \lstinline{transit
 	label=code:pop
 ]{code/pop.c}
 
-Na linha 1 obtém se o tempo atual em milissegundos usando a função \lstinline{clock}, que nos dá a quantidade de tempo passado desde o inicio do programa até o momento atual. Então verifica-se se o último elemento da lista é passível de ser retirado, então compara-se o tempo passado até o momento desde a inserção da transição com o tempo de temporização total. Caso tenha sido alcançado a função retorna sucesso e o elemento pode ser acessado pelo ponteiro de referência passado como parâmetro, caso contrário, o retorno é zero.
+Na linha 1 obtém se o tempo atual em milissegundos usando a função \lstinline{clock}, que nos dá a quantidade de tempo passado desde o início do programa até o momento atual. Então verifica-se se o último elemento da lista é passível de ser retirado, então compara-se o tempo passado até o momento desde a inserção da transição com o tempo de temporização total. Caso tenha sido alcançado, a função retorna sucesso e o elemento pode ser acessado pelo ponteiro de referência passado como parâmetro, caso contrário, o retorno é zero.
 
-Assim a contagem no \textit{thread}, dado pela própria estrutura da rede de petri, pode ser feita com a seguinte rotina de execução:
+Assim, a contagem no \textit{thread}, dado pela própria estrutura da rede de petri, pode ser feita com a seguinte rotina de execução:
 
 \lstinputlisting[
 	language=C,
@@ -353,11 +354,11 @@ Assim a contagem no \textit{thread}, dado pela própria estrutura da rede de pet
 	label=code:thread
 ]{code/thread.c}
 
-Observa-se que a rotina é executa de forma infinita, sempre tentando retirar elementos da fila priorizada, caso não consiga, o laço simplesmente se repete. Lembrando que este processo ocorre de forma paralela ao código da rede. Caso o retorno seja verdadeiro podemos verificar se a transição ainda encontra se sensibilizada, comportamento desejado, pois se ela deixar de ser sensibilizada então não deve ser dispara-la. Caso se encontrar, então disparamos a rede e executamos o \textit{callback} de retorno, deixando o usuário da rede atento que uma transição foi executada de forma assíncrona, fora to tempo de execução da chamada \lstinline{pnet_fire}. 
+Observa-se que a rotina é executa de forma infinita, sempre tentando retirar elementos da fila priorizada, caso não consiga, o laço simplesmente se repete. Lembrando que este processo ocorre de forma paralela ao código da rede. Caso o retorno seja verdadeiro podemos verificar se a transição ainda encontra se sensibilizada, comportamento desejado, pois se ela deixar de ser sensibilizada então a mesma não deve ser disparada. Caso se encontrar, então disparamos a rede e executamos o \textit{callback} de retorno, deixando o usuário da rede atento que uma transição foi executada de forma assíncrona, fora to tempo de execução da chamada \lstinline{pnet_fire}. 
 
 Tal \textit{callback} é definido na criação da rede, visto no código \ref{code:pnet} juntamente a fila priorizada, uma simples função que é executada de forma assíncrona e recebe como parâmetros os dados do usuário, dados no momento da criação, e o número da transição que foi executada, que pode ser utilizado para lógicas auxiliares de escolha do usuário.
 
-As funções de checagem de sensibilização, e de movimentação de fichas são \textit{thread} safe também graças a um outro \textit{mutex} localizado também na estrutura rede de petri, assim, quando as transições temporizadas ocorrerem, elas não entrarão em conflito com as transições instantâneas da execução normal. 
+As funções de checagem de sensibilização e de movimentação de fichas são \textit{thread} safe também, graças a um outro \textit{mutex} localizado também na estrutura rede de petri, assim, quando as transições temporizadas ocorrerem, elas não entrarão em conflito com as transições instantâneas da execução normal. 
 
 Com essa última definição chegamos ao final da estrutura dada no código \ref{code:pnet}, onde cada elemento definido além das matrizes de definição, os mapas, é necessário para que a rede funcione como um todo.
 
@@ -365,7 +366,7 @@ Com essa última definição chegamos ao final da estrutura dada no código \ref
 
 A serialização de dados é bastante simples quando têm-se acesso ao baixo nível, como é o caso da linguagem C, onde podemos ler dados da memória e interpretá-los de maneira livre. Uma das formas de fazer isso é utilizando uma técnica chamada \textit{pointer casting}, onde uma estrutura é definida e então atrelada como ponteiro a uma região de memória, funcionando para leitura e escrita, isso se torna uma forma conveniente de se serializar e desserializar dados. 
 
-As matrizes que compõe nossa rede de petri ocupam um espaço relevante de memória, portanto guardar uma matriz $n$ por $m$ de números inteiros ocuparia minimamente $n\cdot m \cdot 4$ \textit{bytes}, tamanho que cresce exponencialmente, porém, como a maioria das matrizes possuem muitos valores nulos, devido as relações de arcos e marcação inicial, podemos tomar vantagem disso e gravar apenas os valores não nulos, usando marcadores de linha e coluna.
+As matrizes que compõe nossa rede de petri ocupam um espaço relevante de memória, portanto guardar uma matriz $n$ por $m$ de números inteiros ocuparia minimamente $n\cdot m \cdot 4$ \textit{bytes}, tamanho que cresce exponencialmente, porém, como a maioria das matrizes possui muitos valores nulos, devido às relações de arcos e marcação inicial, podemos tomar vantagem disso e gravar apenas os valores não nulos, usando marcadores de linha e coluna.
 
 Define-se assim então para cada matriz um cabeçalho de memória, onde serão contidas a quantidade de linhas e colunas e então os valores não nulos.
 
@@ -401,11 +402,11 @@ Ser =
 \end{Bmatrix}
 $$
 
-Assim dado um \textit{array} de memória de tipo \lstinline{uint32_t *} de tamanho \lstinline{size_t bytes}, podemos realizar um casting conforme o código \ref{code:mfile} para encontrar o tamanho da matiz e assim pre alocar a matriz para ler novamente os dados. 
+Assim, dado um \textit{array} de memória de tipo \lstinline{uint32_t *} de tamanho \lstinline{size_t bytes}, podemos realizar um casting conforme o código \ref{code:mfile} para encontrar o tamanho da matriz e assim pré alocar a matriz para ler novamente os dados. 
 
 \subsection{Serialização da Rede de petri}
 
-Dada a serialização das matrizes a rede de petri torna-se fácil, pois é composta de várias matrizes, deixando somente a definição de alguns metadados necessários. O cabeçalho do arquivo pode ser dado como:
+Dada a serialização das matrizes, a rede de petri torna-se fácil, pois é composta de várias matrizes, deixando somente a definição de alguns metadados necessários. O cabeçalho do arquivo pode ser dado como:
 
 \lstinputlisting[
 	language=C,
@@ -415,11 +416,11 @@ Dada a serialização das matrizes a rede de petri torna-se fácil, pois é comp
 	label=code:header
 ]{code/header.c}
 
-Nota-se que o primeiro membro, \textit{magic}, trata-se de um identificação visual, este guarda quatro caracteres de texto de valor sempre "PNET", de forma a indicar que este arquivo é um arquivo de tipo rede de petri, seguido do número de versão do arquivo, que têm-seu caso de uso caso a partir deste valor no cabeçalho ocorra mudanças no futuro, os programas podem alterar a leitura e escrita com base no número de versão, dando flexibilidade e opções de versionamento. 
+Nota-se que o primeiro membro, \textit{magic}, trata-se de uma identificação visual, este guarda quatro caracteres de texto de valor sempre ``PNET'', de forma a indicar que este arquivo é um arquivo de tipo rede de petri, seguido do número de versão do arquivo, que têm-seu caso de uso caso a partir deste valor no cabeçalho ocorra mudanças no futuro, os programas podem alterar a leitura e escrita com base no número de versão, dando flexibilidade e opções de versionamento. 
 
 Temos o valor binário de validez da rede de petri, seguido do valor de tamanho das matrizes, que como discutido anteriormente foi dado como de trinta e dois \textit{bits}, \lstinline{0x20}, mas poderia ser dado como matrizes de dezesseis \textit{bits}, \lstinline{0x10}, ou outros tamanhos caso a necessidade de armazenamento de memória.
 
-O campo \lstinline{size} armazena o valor total de \textit{bytes} ocupado pela serialização rede excepto pelo cabeçalho fixo, ou seja, a partir do campo \lstinline{neg_arcs_map_size}. Existe também a checagem CRC32 \cite{crc32} dos dados dados serializados, exceto pelo cabeçalho, para que se possa detectar erros por corrupção de memória. E finalmente as quantidades de elementos, transições, lugares, entradas e saídas, e então as matrizes e seus tamanhos em \textit{bytes}, que compõem nossa rede de petri.
+O campo \lstinline{size} armazena o valor total de \textit{bytes} ocupado pela serialização rede excepto pelo cabeçalho fixo, ou seja, a partir do campo \lstinline{neg_arcs_map_size}. Existe também a checagem CRC32 \cite{crc32} dos dados serializados, exceto pelo cabeçalho, para que se possa detectar erros por corrupção de memória. E finalmente as quantidades de elementos, transições, lugares, entradas e saídas, e então as matrizes e seus tamanhos em \textit{bytes}, que compõem nossa rede de petri.
 
 Matrizes serializadas
 \begin{itemize} 
@@ -443,18 +444,20 @@ Para este arquivo, dado o nome da biblioteca e do indicador no cabeçalho, sua e
 
 \begin{figure}[h!]
 	\centering
-	\caption{Visão do arquivo pnet um uma analisador hexadecimal}
+	\caption{Visão do arquivo pnet em um analisador hexadecimal}
 	\includegraphics[width=16cm]{images/hexfile.png}
 	\label{fig:hexfile}
 \end{figure}
 
+\pagebreak
+
 \section{Algoritmo de compilação para lista de instrução}
 
-A compilação para lista de instrução foi baseado no método de compilação para Ladder apresentado no trabalho Petrilab \cite{de2015petrilab}, porém para lista de instrução, fato que é possível devido a característica de que programação Ladder pode ser gerada a partir de uma lista de instrução e vice-versa.   
+A compilação para lista de instrução foi baseada no método de compilação para \textit{Ladder} apresentado no trabalho Petrilab \cite{de2015petrilab}, porém qui, para lista de instrução. Fato que é possível devido à característica de que programação \textit{Ladder} pode ser gerada a partir de uma lista de instrução e vice-versa.   
 
-Como está sendo implementando um compilador para lista de instrução, sabe-se que funcionalidades de borda de eventos e temporizadores são de fácil acesso, dispensando criação de estruturas adicionais para implementação dos mesmos, e portanto podemos compilar a rede de petri de forma mais simples, mapeando estas funcionalidade diretamente conforme necessário. 
+Como está sendo implementando um compilador para lista de instrução, sabe-se que funcionalidades de borda de eventos e temporizadores são de fácil acesso, dispensando-se a criação de estruturas adicionais para implementação dos mesmos, e portanto, podemos compilar a rede de petri de forma mais simples, mapeando estas funcionalidades diretamente conforme necessário. Diferente da biblioteca C, onde foi desenvolvido o funcionamentos dessas funcionalidades.
 
-Para a definição de funcionalidade, serão seguidos os passos como implementados em sumo na biblioteca em C.
+Para a compilação serão definidas as seções assim como implementados na biblioteca em C.
 
 \begin{itemize}
 	\item Marcação inicial
@@ -463,11 +466,19 @@ Para a definição de funcionalidade, serão seguidos os passos como implementad
 	\item Lógica de saída
 \end{itemize}
 
-Cada passo será desenvolvido de forma sequencial, para ter-se esta ordem de execução de código no PLC dado. Para a definição deste compilador será utilizada como referência a lista de instrução dada pelo fabricante WEG para o PLC TPW04 \cite{wegtpw04}.
+Cada passo será desenvolvido de forma sequencial, para ter-se esta ordem de execução de código no PLC dado.
 
-Para compilação para código C usaremos uma função facilitadora, \lstinline{string_cat_fmt}, que é uma função feita com base na biblioteca C padrão, parecida com a função \lstinline{printf} mas que recebe uma string de formatação, a expande e concatena o resultado em um buffer de saída, assim temos ao inicio um buffer vazio, e vamos inserindo as instruções até que ao final tenhamos o programa compilado. Também iremos utilizar as constantes \lstinline{INITIAL_RE}, que se refere a memória \lstinline{M8001} que é ativa por apenas um ciclo quando o PLC é inicializado, e \lstinline{ALWAYS}, a memória especial \lstinline{M8000}, que é sempre ativa durante a execução do código. 
+Para compilação para código C usaremos uma função facilitadora, \lstinline{string_cat_fmt}, que é uma função feita com base na biblioteca C padrão, parecida com a função \lstinline{printf} mas que recebe uma string de formatação, a expande e concatena o resultado em um buffer de saída. Assim temos ao início um buffer vazio, e vamos inserindo as instruções até que ao final tenhamos o programa compilado. 
 
-Também iremos considerar a posição inicial de algumas memórias, por exemplo, as transições sensibilizadas são armazenadas em memórias binárias simples do tipo \lstinline{M} enquanto os lugares são do tipo \textit{word}, no PLC, \lstinline{D}. Também as entradas \lstinline{X}, saídas \lstinline{Y} e o índice do pulo condicional \lstinline{J}. Todas essa variáveis internas serão usadas e necessitem de um índice numérico, e portanto, o algoritmo de compilação deverá ser ciente do índice inicial para cada uma delas, assim temos a seguinte chamada de função para realização da compilação da rede de petri para lista de instrução.
+Também iremos utilizar as constantes \lstinline{INITIAL_RE}, que se refere a memória \lstinline{M8001} que é ativa por apenas um ciclo quando o PLC é inicializado, e \lstinline{ALWAYS}, a memória especial \lstinline{M8000}, que é sempre ativa durante a execução do código.
+
+Como parte do algoritmo de compilação devemos definir algumas memórias temporárias e memórias para o estado da rede. Será definido que as transições e sua sensibilização via temporizador e entradas serão feitas e então armazenadas em uma memória simples, no PLC, uma memória \lstinline{M}. Para os lugares necessitamos armazenar a quantidade de fichas atual para cada um, então utilizaremos uma unidade de memória não binária, uma memória \lstinline{word} de 16 bits, no PLC, memória tipo \lstinline{D}. As entradas e saídas serão respectivamente \lstinline{X} e \lstinline{Y}.
+
+Ainda iremos ter um pulo condicional usado para satisfazer a condição definida na seção \ref{section:limitations}, dado no PLC pela instrução \lstinline{J}, para marcação, e \lstinline{CJ} para o pulo condicional.
+
+Também iremos considerar a posição inicial das memórias, também as entradas, saídas e o índice do pulo condicional. Todas essas variáveis internas necessitam de um índice numérico e, portanto, o algoritmo de compilação deverá ser ciente do índice inicial para cada uma delas, para que o possa incrementar conforme a quantidade de transições, lugares, entradas e saídas. 
+
+Temos assim a seguinte chamada de função para realização da compilação da rede de petri para lista de instrução. Percebe-se que para compilação, basta que tenhamos as informações da rede de petri e das posições iniciais.
 
 \lstinputlisting[
 	language=C,
@@ -479,7 +490,7 @@ Também iremos considerar a posição inicial de algumas memórias, por exemplo,
 	label=code:tpw1
 ]{code/tpw.c}
 
-Dada uma rede de petri exemplo, figura \ref{fig:pnetcomp}, vamos analisar o processo de compilação, mostrando a implementação das diferentes partes, a lista de instrução para cada componente e a implementação em código C. A rede apresenta todas as funcionalidades proposta exceto pelo arco de \textit{reset}, e demonstra uma implementação simples de um processo de exclusão mútua utilizando arcos negados, redundante pois só há apenas uma ficha em cada lugar por vez mas demonstra a ideia. 
+Dada uma rede de petri exemplo, figura \ref{fig:pnetcomp}, vamos analisar o processo de compilação, mostrando a implementação das diferentes seções, a lista de instrução para cada componente e a implementação em código C. A rede apresenta todas as funcionalidades propostas, exceto pelo arco de \textit{reset}, e demonstra uma implementação simples de um processo de exclusão mútua utilizando arcos negados, redundante, pois há apenas uma ficha em cada lugar por vez, mas demonstra um processo lógico simples. 
 
 \begin{figure}[ht]
 	\centering
@@ -489,9 +500,11 @@ Dada uma rede de petri exemplo, figura \ref{fig:pnetcomp}, vamos analisar o proc
 	\label{fig:pnetcomp}
 \end{figure}
 
-Onde abaixo das transições temos o evento de borda relacionado a entrada e abaixo dos lugares temos a legenda da saída a ser acionada e a condição lógica de ativação.
+Na rede de petri, abaixo das transições temos o evento de borda relacionado a entrada, abaixo dos lugares temos a legenda da saída e a condição lógica de ativação da mesma.
 
-Para marcação inicial é utilizada a memória especial \lstinline{M8001} e a instrução \lstinline{MOV} para mover as fichas para os lugares iniciais, que são no PLC memórias do tipo \textit{word}, a partir de dado endereço.  
+Em lista de instrução, começaremos a compilação pela marcação inicial, onde é utilizada a memória especial \lstinline{M8001} e a instrução \lstinline{MOV} para mover as fichas para os lugares iniciais, que são no PLC memórias do tipo \textit{word}.
+
+A compilação é feita basicamente pela varredura da matriz de marcação inicial, ou seja, um laço de repetição que irá iterar pelos lugares. Assim também será realizada a implementação para os arcos, entradas e saídas, sempre utilizando as matrizes de definição, os mapas, para que possamos traduzir em código de lista de instrução.
 
 \lstinputlisting[
 	language=C,
@@ -503,7 +516,7 @@ Para marcação inicial é utilizada a memória especial \lstinline{M8001} e a i
 	label=code:ilmem
 ]{code/il.txt}
 
-Em código C isso pode ser implementado por um laço de repetição pelos lugares da rede de petri, onde para cada lugar, se há marcação, concatena se a expressão em formato de lista de instrução no texto de saída final. 
+Em código C isso pode ser implementado por um laço de repetição pelos lugares da rede de petri, onde para cada lugar, se há marcação, concatena-se a expressão em formato de lista de instrução no texto de saída final. 
 
 \lstinputlisting[
 	language=C,
@@ -527,7 +540,7 @@ A detecção de entrada e sensibilização de transições é relativamente fác
 	label=code:ilsense
 ]{code/il.txt}
 
-Observa-se a instrução a mais de pulo condicional tal condição é usada aqui para implementar a limitação dada à rede acerca de disparos mútuos, discutidos na seção \ref{section:limitations}. O pulo irá ocorrer nas sensibilizações pois pode-se definir o resultado de temporizações em sequência devido a arquitetura do ambiente de execução do PLC, diferente da biblioteca C, facilitando assim a definição desses disparos assíncronos. Esse pulo condicional será para uma marcação de execução, por exemplo \lstinline{P0}, posteriormente feita no inicio da sequência de disparo.  
+Observa-se a instrução a mais de pulo condicional, tal condição é usada aqui para implementar a limitação dada à rede acerca de disparos mútuos, discutidos na seção \ref{section:limitations}. O pulo irá ocorrer nas sensibilizações, pois pode-se definir o resultado de temporizações em sequência devido à arquitetura do ambiente de execução do PLC, diferente da biblioteca C, facilitando assim a definição desses disparos assíncronos. Esse pulo condicional será para uma marcação de execução, por exemplo \lstinline{P0}, posteriormente feita no início da sequência de disparo.  
 
 \lstinputlisting[
 	language=C,
@@ -539,9 +552,9 @@ Observa-se a instrução a mais de pulo condicional tal condição é usada aqui
 	label=code:iltimer
 ]{code/il.txt}
 
-No disparo de transições temporizadas temos que a entrada aciona o temporizador, que quando for acionado, irá ao mesmo tempo acionar a memória de sensibilização, irá se auto reinicializar e fará o pulo condicional para os disparos.   
+No disparo de transições temporizadas temos que a entrada aciona o temporizador, que quando for acionado, irá ao mesmo tempo, acionar a memória de sensibilização, irá se autorreinicializar e fará o pulo condicional para os disparos. Como visto no código \ref{code:iltimer}.
 
-A implementação em C das entradas e timers pode ser dada por um laço de repetição pelas transições e entradas, caso não houverem entradas, a transição sempre dispara, e caso houverem verifica-se se são temporizadas ou não, em código C temos: 
+A compilação das entradas e timers pode ser dada por um laço de repetição pelas transições e entradas. Caso não houverem entradas, a transição sempre dispara, e caso houverem, verifica-se se são temporizadas ou não. Caso não sejam temporizadas, implementamos o código de lista de instrução como no código \ref{code:ilsense}, caso sejam temporizadas, como no código \ref{code:iltimer}. Em código C temos: 
 
 \lstinputlisting[
 	language=C,
@@ -553,7 +566,7 @@ A implementação em C das entradas e timers pode ser dada por um laço de repet
 	label=code:tpwi
 ]{code/tpw.c}
 
-Onde na linha 2 verifica-se há uma matriz de entrada, caso não todas as transições são sensibilizadas por padrão. Na linha 8 vemos o laço pelas entradas.
+Onde na linha 2 verifica-se se há uma matriz de entrada, caso não todas as transições são sensibilizadas por padrão. Na linha 8 vemos o laço pelas entradas.
 
 Linha 9, caso tenhamos varrido todas as entradas e não houver entrada atrelada a esta transição, então marcar a transição como sensibilizada. 
 
@@ -563,7 +576,7 @@ Linha 36, caso a transição não tenha temporização mas tenha entrada, temos 
 
 E por fim, linha 51, caso encontrarmos um caso onde que não seja temporizado e nem com entrada, os laço de repetição para as entradas será continuado normalmente, até que a condição da linha 9 ative e a transição seja marcada como sempre acionada, como mencionado anteriormente.
 
-Para a movimentação dos arcos pelo disparo primeiramente vamos verificar as condições de sensibilização, os arcos negativos e os arcos negados utilizando as instruções \lstinline{AND>=} e \lstinline{AND=}.
+Para a movimentação das fichas pelo disparo, primeiramente vamos verificar as condições de sensibilização, checando os arcos negativos e com a instrução \lstinline{AND>=} e os arcos negados com a instrução \lstinline{AND=}. No código \ref{code:ilfire}, verifica-se que para os arcos de peso negativos, verificamos se os lugares possuem a mesma quantidade ou mais fichas que uma constante, esta é dada pela matriz de pesos negativos. Para os arcos negados, verificamos se o lugar possui quantidade de fichas igual a zero.
 
 \lstinputlisting[
 	language=C,
@@ -575,7 +588,11 @@ Para a movimentação dos arcos pelo disparo primeiramente vamos verificar as co
 	label=code:ilfire
 ]{code/il.txt}
 
-Dada a verificação, os arcos de movimentação serão acionados. No exemplo, arcos de peso negativos e positivos, que irão usar as instruções de subtração e adição para movimentação das fichas, um arco de \textit{reset} em contra partida usaria uma instrução \lstinline{MOV} com constante zero.
+Dada a verificação, os arcos de movimentação serão acionados. No exemplo, arcos de peso negativos e positivos, que irão usar as instruções de subtração e adição para movimentação das fichas. Um arco de \textit{reset} em contrapartida usaria uma instrução \lstinline{MOV} com constante zero, caso estivesse presente neste exemplo.
+
+A implementação é realizada por um laço de repetição pelas transições e pelos lugares. Primeiramente carregamos o valor da memória temporária referente a transição atual, então, em série, adicionam-se as condições lógicas de comparação para os tipos de arco de peso negativo e/ou de arco negado, entre a transição e cada lugar, se houverem.  
+
+Armazena-se o valor computado após as condições usando a instrução \lstinline{MPS}. Agora para cada lugar, adicionam-se as instruções de \lstinline{ADD} para os arcos positivos, \lstinline{SUB}para os arcos negativos e de \lstinline{MOV} para os arcos de reset, se houverem estes arcos. Entre cada instrução devemos ler o valor computado pelas condições anteriores usando \lstinline{MRD}. Na última instrução de movimentação usamos \lstinline{MPP} para limpar o valor de condição anterior da pilha e escrevemos a última instrução.
 
 Em código C temos:
 
@@ -589,13 +606,13 @@ Em código C temos:
 	label=code:tpwi
 ]{code/tpw.c}
 
-Na linha 1 definimos a marcação para o pulo condicional, indicando que aqui inicia-se os disparos após a detecção de entrada e temporização. 
+Na linha 1 definimos a marcação para o pulo condicional, indicando que aqui iniciam-se os disparos após a detecção de entrada e temporização. 
 
 Na linha 6 começamos carregando o valor de sensibilidade da transição verificado anteriormente. Na linhas 8, um laço de repetição por todos os lugares, onde verificamos se para dado lugar e transição existe um arco de peso negativo ou arco negado, e se for o caso, adicionar uma comparação das fichas usando \lstinline{AND>=} para o arco de peso e \lstinline{AND= K0} para o arco negado.
 
-Na linha 31 então iremos então adicionar as movimentações das fichas, usando as instrução de memória \lstinline{MPS, MRD, MPP} para os vários arcos do lugar/transição, o arco de peso negativo, que usa a instrução \lstinline{SUB}, arco positivo com a instrução \lstinline{ADD} e de \textit{reset} com \lstinline{MOV}. 
+Na linha 31 então iremos então adicionar as movimentações das fichas, usando as instruções de memória \lstinline{MPS, MRD, MPP} para os vários arcos do lugar/transição, o arco de peso negativo, que usa a instrução \lstinline{SUB}, arco positivo com a instrução \lstinline{ADD} e de \textit{reset} com \lstinline{MOV}. 
 
-Por fim temos as saídas, as quais só utilizam a comparação entre os lugares e uma constante dada pela matriz de saída, e acionam a saída física.
+Por fim temos as saídas, as quais só utilizam a comparação entre os lugares e uma constante dada pela matriz de saída, e após a comparação, acionam a saída física.
 
 \lstinputlisting[
 	language=C,
@@ -606,6 +623,8 @@ Por fim temos as saídas, as quais só utilizam a comparação entre os lugares 
 	lastline=57,
 	label=code:ilout
 ]{code/il.txt}
+
+Implementando, faremos um laço de repetição entre os lugares e as saídas, para cada lugar, verifica-se se há uma saída atrelada, se houver, verifica-se se o lugar possui a mesma quantidade ou mais fichas do que necessárias, usando a instrução \lstinline{LD>=} para com a memória do lugar. Então, em seguida usamos a instrução \lstinline{OUT} para redirecionar o valor da comparação para a saída atrelada. 
 
 Em código C temos:
 

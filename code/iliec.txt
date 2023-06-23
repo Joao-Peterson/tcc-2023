@@ -1,0 +1,10 @@
+LD var
+ST outvar
+
+LD X0
+MPS
+OUT Y0 
+MRD
+SET D201 
+MPP
+MOV K1 D204 

@@ -83,6 +83,7 @@
         "Petrilab",
         "pnet",
         "PNML",
+        "POSIX",
         "Protoboard",
         "pullup",
         "Puschlowski",
@@ -124,6 +125,7 @@
         "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/reset.svg",
         "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/negado.svg",
         "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/illadder.svg",
-        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/pnetcomp.svg"
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/pnetcomp.svg",
+        "/home/peterson/synced/ifc-luzerna/eca-2022-2/tcc/latex/images/mi.svg"
     ]
 }
