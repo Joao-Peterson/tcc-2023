@@ -147,6 +147,23 @@ Para fins de simplificação será reforçado que cada transição seja atrelada
 
 Casos onde deseja-se tal comportamento, pode-se fácil e seguramente ser implementado utilizando múltiplas transições e lugares auxiliares, deixando assim essa abstração de responsabilidade do autor da rede de petri.
 
+\subsection{Temporização}
+
+As transições temporizadas funcionam como retardos de tempo. Dado uma transição que depende de um evento de entrada e de arcos condicionais, como arcos de peso e arcos negados, está começará a contar a partir do momento que todas as condições forem satisfeitas. A contagem é realizada até o tempo determinado, onde a transição será disparada somente se as condições dos arcos ainda permanecem verdadeiras. Se as condições permitirem e a transição for sensibilizada novamente, a contagem atual deve continuar normalmente até que a transição tenha chance de tentar disparar, momento em que será liberada para iniciar a contagem novamente se requerido. 
+
+As transições não temporizadas devem ser disparadas de forma individual, já as temporizadas podem começar a contar de forma simultânea, porém, devem ser disparadas também de forma individual. Em caso de conflito, da mesma forma que para as transições normais, a transição de menor índice nas matrizes receberá prioridade. 
+
+O razão dessa definição tem como base garantir o funcionamento correto das transições temporizadas nos seguintes casos:
+
+\begin{itemize}
+	\item Transições temporizadas sem entrada e com arcos condicionais. Devem começar a contagem logo que os arcos condicionais permitirem o disparo. 
+	\item Transições temporizadas com entrada e sem arcos condicionais. Devem começar a contagem assim que o evento de entrada for verdadeiro. 
+	\item Transições temporizadas com entrada e com arcos condicionais. Devem começar a contagem assim que o evento de entrada for verdadeiro, porém o disparo só acontece se ao final da contagem os arcos de condição forem satisfeitos. 
+	\item Transições temporizadas sem entrada e sem arcos condicionais. Nunca serão sensibilizadas e disparadas. 
+\end{itemize}
+
+Tal definição evita que, por exemplo, uma transição sem evento de entrada, fique tentando contar o tempo de retardo, situação que pode evitar que a mesma dispare mesmo que os arcos condicionais permitam, pois a mesma estará contando repetidamente, e poderá somente ser disparada de forma períodica durante um pequeno espaço de tempo.
+
 \section{Estruturas de dados e execução de código}
 
 Quando se trata de programação de bibliotecas e artifícios\footnote{Pequena parte, fragmento, de um todo} de código, ou seja, código que será usado por terceiros, é necessário sempre se ter em mente que a implementação seja além de funcional, bem documentada e que seja robusta a erros, conceito que envolve, mas não é limitado a, tratamento de erros e exceções, visibilidade parcial da implementação, que esconde parte da funcionalidade evitando uso indesejado por parte do usuário, ou ainda a utilização de testes unitários, que testam partes individuais da biblioteca de forma automatizada. Então é necessário entender alguns conceitos de organização e execução de código por que garantirão nossas expectativas de funcionamento bem como irão garantir a robustez desejada a biblioteca. 
