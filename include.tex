@@ -1,11 +1,21 @@
+% \documentclass[
+% 	12pt, 
+% 	a4paper, 
+% 	openright, 
+% 	twoside
+% ]{abntex2}                                                                          % modelo abntex2(memoir). Fonte 12, papel A4, twoside(ambos lados) e openright(anverso) para elementos pré textuais e novos chapters
 \documentclass[
 	12pt, 
 	a4paper, 
 	openright, 
-	twoside
+	oneside
 ]{abntex2}                                                                          % modelo abntex2(memoir). Fonte 12, papel A4, twoside(ambos lados) e openright(anverso) para elementos pré textuais e novos chapters
 % \usepackage{helvet}                                                                 % pacote helvet/arial
 % \renewcommand{\familydefault}{\sfdefault}                                           % configura fonte como serif (Arial)
+%% Muda letra para muito próximo da arial
+\renewcommand{\rmdefault}{phv} % Arial
+\renewcommand{\sfdefault}{phv} % Arial
+
 \usepackage[T1]{fontenc}                                                            % fonte
 \usepackage[utf8]{inputenc}                                                         % codificação do arquivo tex, caracteres utf8
 \usepackage[brazil]{babel}                                                          % hifenização
@@ -15,7 +25,7 @@
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}                            % formatação de url's e hyperlink neles
 % \usepackage[alf, abnt-emphasize=bf]{abntex2cite}                                    % citações estilo ABNT, opção [alf] para citação (autor, data) e [num,overcite] para citação estilo [1]. abnt-emphasize=bf para deixar títulos em negrito https://linorg.usp.br/CTAN/macros/latex/contrib/abntex2/doc/abntex2cite.pdf
 
-\usepackage[alf]{abntex2cite}                                              % citações estilo ABNT, opção [alf] para citação (autor, data) e [num,overcite] para citação estilo [1]. https://linorg.usp.br/CTAN/macros/latex/contrib/abntex2/doc/abntex2cite.pdf
+\usepackage[alf]{abntex2cite}                                                       % citações estilo ABNT, opção [alf] para citação (autor, data) e [num,overcite] para citação estilo [1]. https://linorg.usp.br/CTAN/macros/latex/contrib/abntex2/doc/abntex2cite.pdf
 % \citebrackets[]																		% estilo de colchetes para as fontes
 % \usepackage[nottoc]{tocbibind}                                                      % opções do sumário, bibliografia no sumário, tirar autorreferência ao sumário 
 \usepackage{graphicx}                                                               % imagens e gráficos graphviz
@@ -133,55 +143,118 @@
 \setlength{\cftbeforefigureskip}{0.75ex}                                             % espaçamento de 1.5 na lista de figuras
 \setlength{\cftbeforetableskip}{0.75ex}                                              % espaçamento de 1.5 na lista de tabelas
 
-% chapter font config
-\renewcommand{\ABNTEXchapterfont}{\fontseries{bx}\fontshape{n}\selectfont}          % estilo da fonte, negrito, não itálico, maiúsculo, tamanho 12pt (\normalsize)
-\setboolean{ABNTEXupperchapter}{true}          										
-\renewcommand{\ABNTEXchapterfontsize}{\normalsize}         							
-\setlength{\beforechapskip}{1.5ex}													% espaçamento entre titulo do capitulo e o paragrafo anterior de aproximadamente 1.5
-\setlength{\afterchapskip}{1.5ex}													% espaçamento entre titulo do capitulo e o paragrafo seguinte de aproximadamente 1.5
-\setlength{\cftbeforechapterskip}{0.75ex}         									% espaçamento de 1.5 no sumário
-\renewcommand{\cftchapterfont}{\ABNTEXchapterfont}                  				% definir mesmo estilo de fonte no sumário
+% % chapter font config
+% \renewcommand{\ABNTEXchapterfont}{\fontseries{bx}\fontshape{n}\selectfont}          % estilo da fonte, negrito, não itálico, maiúsculo, tamanho 12pt (\normalsize)
+% \setboolean{ABNTEXupperchapter}{true}          										
+% \renewcommand{\ABNTEXchapterfontsize}{\normalsize}         							
+% \setlength{\beforechapskip}{1.5ex}													% espaçamento entre titulo do capitulo e o paragrafo anterior de aproximadamente 1.5
+% \setlength{\afterchapskip}{1.5ex}													% espaçamento entre titulo do capitulo e o paragrafo seguinte de aproximadamente 1.5
+% \setlength{\cftbeforechapterskip}{0.75ex}         									% espaçamento de 1.5 no sumário
+% \renewcommand{\cftchapterfont}{\ABNTEXchapterfont}                  				% definir mesmo estilo de fonte no sumário
+% \renewcommand{\cftchapterpagefont}{\cftchapterfont}
+
+% % part font config
+% \renewcommand{\ABNTEXpartfont}{\fontseries{bx}\fontshape{n}\selectfont}             % estilo da fonte, negrito, não itálico, maiúsculo, tamanho 12pt (\normalsize)
+% % \setboolean{ABNTEXupperpart}{false}            										
+% \renewcommand{\ABNTEXpartfontsize}{\normalsize}            							
+% % \setlength{\beforepartskip}{1.5ex}													% espaçamento entre titulo da parte e o paragrafo anterior de aproximadamente 1.5
+% % \setlength{\afterpartskip}{1.5ex}													% espaçamento entre titulo da parte e o paragrafo seguinte de aproximadamente 1.5
+% % \setlength{\cftbeforepartskip}{1.5ex}            									% espaçamento de 1.5 no sumário
+% % \renewcommand{\cftpartfont}{\ABNTEXpartfont}                        				% definir mesmo estilo de fonte no sumário
+% % \renewcommand{\cftpartpagefont}{\cftpartfont}
+
+% % section font config
+% \renewcommand{\ABNTEXsectionfont}{\fontseries{m}\fontshape{n}\selectfont}           % estilo da fonte, não negrito, não itálico, maiúsculo, tamanho 12pt (\normalsize)
+% \setboolean{ABNTEXuppersection}{true}          										
+% \renewcommand{\ABNTEXsectionfontsize}{\normalsize}  
+% \setlength{\beforesecskip}{1.5ex}													% espaçamento entre titulo da seção e o paragrafo anterior de aproximadamente 1.5
+% \setlength{\aftersecskip}{1.5ex}       												% espaçamento entre titulo da seção e o paragrafo seguinte de aproximadamente 1.5
+% \setlength{\cftbeforesectionskip}{0.75ex}         									% espaçamento de 1.5 no sumário
+% \renewcommand{\cftsectionfont}{\ABNTEXsectionfont}                  				% definir mesmo estilo de fonte no sumário
+% \renewcommand{\cftsectionpagefont}{\cftsectionfont}
+
+% % subsection font config
+% \renewcommand{\ABNTEXsubsectionfont}{\fontseries{b}\fontshape{n}\selectfont}        % estilo da fonte, negrito, não itálico, minúsculo, tamanho 12pt (\normalsize)
+% \setboolean{ABNTEXuppersubsection}{false}      										
+% \renewcommand{\ABNTEXsubsectionfontsize}{\normalsize}      
+% \setlength{\beforesubsecskip}{1.5ex}   												% espaçamento entre titulo da sub seção e o paragrafo anterior de aproximadamente 1.5
+% \setlength{\aftersubsecskip}{1.5ex}    												% espaçamento entre titulo da sub seção e o paragrafo seguinte de aproximadamente 1.5
+% \setlength{\cftbeforesubsectionskip}{0.75ex}      									% espaçamento de 1.5 no sumário
+% \renewcommand{\cftsubsectionfont}{\ABNTEXsubsectionfont}            				% definir mesmo estilo de fonte no sumário
+% \renewcommand{\cftsubsectionpagefont}{\cftsubsectionfont}
+
+% % subsubsection font config
+% \renewcommand{\ABNTEXsubsubsectionfont}{\fontseries{m}\fontshape{n}\selectfont}    % estilo da fonte, não negrito, itálico, minúsculo, tamanho 12pt (\normalsize)
+% \setboolean{ABNTEXuppersubsubsection}{false}   										
+% \renewcommand{\ABNTEXsubsubsectionfontsize}{\normalsize}   
+% \setlength{\beforesubsubsecskip}{1.5ex}												% espaçamento entre titulo da sub sub seção e o paragrafo anterior de aproximadamente 1.5
+% \setlength{\aftersubsubsecskip}{1.5ex} 												% espaçamento entre titulo da sub sub seção e o paragrafo seguinte de aproximadamente 1.5
+% \setlength{\cftbeforesubsubsectionskip}{0.75ex}   									% espaçamento de 1.5 no sumário
+% \renewcommand{\cftsubsubsectionfont}{\ABNTEXsubsubsectionfont}      				% definir mesmo estilo de fonte no sumário
+% \renewcommand{\cftsubsubsectionpagefont}{\cftsubsubsectionfont}
+
+%--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- 
+% comando para colocar as fontes conforme ABNT, criado por Thiago Tavares
+% não use o comando \fonte, utilize \fontIFC
+
+\newcommand{\fontIFC}[1]{ 
+\\
+\raggedright \footnotesize Fonte: #1
+}
+%--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- 
+
+%%--------- Ajustando tamanho das fontes --------% Ajusta os títulos para não ficarem todos grandões
+\renewcommand{\ABNTEXchapterfontsize}{\normalsize}
+\renewcommand{\ABNTEXpartfontsize}{\normalsize}
+\renewcommand{\ABNTEXsectionfontsize}{\normalsize}
+\renewcommand{\ABNTEXsubsectionfontsize}{\normalsize}
+\renewcommand{\ABNTEXsubsubsectionfontsize}{\normalsize}
+
+%--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- 
+% --- --- 
+% Fontes dos títulos e seções
+% --- 
+%% Coloca negrito nas coisas corretas para o sumário também sair correto.
+%% Os títulos dos capítulos e seções tem que ser colocados maiúsculos manualmente. Preço a se pagar para que os apêndices e anexos não fiquem todos maiúsculos.
+% Fontes padroes de part, chapter, section, subsection e subsubsection
+\renewcommand{\ABNTEXchapterfont}{\fontseries{bx}\fontshape{n}\selectfont}
+\renewcommand{\ABNTEXchapterfontsize}{\normalsize\selectfont}
+\renewcommand{\ABNTEXpartfont}{\fontseries{bx}\fontshape{n}\selectfont}
+\renewcommand{\ABNTEXpartfontsize}{\Huge\selectfont}
+\renewcommand{\ABNTEXsectionfont}{\fontseries{m}\fontshape{n}\selectfont}
+\renewcommand{\ABNTEXsectionfontsize}{\normalsize\selectfont}
+\renewcommand{\ABNTEXsubsectionfont}{\fontseries{b}\fontshape{n}\selectfont}
+\renewcommand{\ABNTEXsubsectionfontsize}{\normalsize\selectfont}
+\renewcommand{\ABNTEXsubsubsectionfont}{\fontseries{m}\fontshape{n}\selectfont}
+\renewcommand{\ABNTEXsubsubsectionfontsize}{\normalsize\selectfont}
+\renewcommand{\ABNTEXsubsubsubsectionfont}{\fontseries{m}\fontshape{it}\selectfont}
+\renewcommand{\ABNTEXsubsubsubsectionfontsize}{\normalsize\selectfont}
+
+
+% --- 
+% Sumários
+% --- 
+%% Coloca negrito nas coisas corretas para o sumário também sair correto.
+\renewcommand{\cftpartfont}{\ABNTEXpartfont}
+\renewcommand{\cftpartpagefont}{\cftpartfont}
+
+\renewcommand{\cftchapterfont}{\ABNTEXchapterfont}
 \renewcommand{\cftchapterpagefont}{\cftchapterfont}
 
-% part font config
-\renewcommand{\ABNTEXpartfont}{\fontseries{bx}\fontshape{n}\selectfont}             % estilo da fonte, negrito, não itálico, maiúsculo, tamanho 12pt (\normalsize)
-% \setboolean{ABNTEXupperpart}{false}            										
-\renewcommand{\ABNTEXpartfontsize}{\normalsize}            							
-% \setlength{\beforepartskip}{1.5ex}													% espaçamento entre titulo da parte e o paragrafo anterior de aproximadamente 1.5
-% \setlength{\afterpartskip}{1.5ex}													% espaçamento entre titulo da parte e o paragrafo seguinte de aproximadamente 1.5
-% \setlength{\cftbeforepartskip}{1.5ex}            									% espaçamento de 1.5 no sumário
-% \renewcommand{\cftpartfont}{\ABNTEXpartfont}                        				% definir mesmo estilo de fonte no sumário
-% \renewcommand{\cftpartpagefont}{\cftpartfont}
-
-% section font config
-\renewcommand{\ABNTEXsectionfont}{\fontseries{m}\fontshape{n}\selectfont}           % estilo da fonte, não negrito, não itálico, maiúsculo, tamanho 12pt (\normalsize)
-\setboolean{ABNTEXuppersection}{true}          										
-\renewcommand{\ABNTEXsectionfontsize}{\normalsize}  
-\setlength{\beforesecskip}{1.5ex}													% espaçamento entre titulo da seção e o paragrafo anterior de aproximadamente 1.5
-\setlength{\aftersecskip}{1.5ex}       												% espaçamento entre titulo da seção e o paragrafo seguinte de aproximadamente 1.5
-\setlength{\cftbeforesectionskip}{0.75ex}         									% espaçamento de 1.5 no sumário
-\renewcommand{\cftsectionfont}{\ABNTEXsectionfont}                  				% definir mesmo estilo de fonte no sumário
+\renewcommand{\cftsectionfont}{\ABNTEXsectionfont}
 \renewcommand{\cftsectionpagefont}{\cftsectionfont}
 
-% subsection font config
-\renewcommand{\ABNTEXsubsectionfont}{\fontseries{b}\fontshape{n}\selectfont}        % estilo da fonte, negrito, não itálico, minúsculo, tamanho 12pt (\normalsize)
-\setboolean{ABNTEXuppersubsection}{false}      										
-\renewcommand{\ABNTEXsubsectionfontsize}{\normalsize}      
-\setlength{\beforesubsecskip}{1.5ex}   												% espaçamento entre titulo da sub seção e o paragrafo anterior de aproximadamente 1.5
-\setlength{\aftersubsecskip}{1.5ex}    												% espaçamento entre titulo da sub seção e o paragrafo seguinte de aproximadamente 1.5
-\setlength{\cftbeforesubsectionskip}{0.75ex}      									% espaçamento de 1.5 no sumário
-\renewcommand{\cftsubsectionfont}{\ABNTEXsubsectionfont}            				% definir mesmo estilo de fonte no sumário
+\renewcommand{\cftsubsectionfont}{\ABNTEXsubsectionfont}
 \renewcommand{\cftsubsectionpagefont}{\cftsubsectionfont}
 
-% subsubsection font config
-\renewcommand{\ABNTEXsubsubsectionfont}{\fontseries{m}\fontshape{n}\selectfont}    % estilo da fonte, não negrito, itálico, minúsculo, tamanho 12pt (\normalsize)
-\setboolean{ABNTEXuppersubsubsection}{false}   										
-\renewcommand{\ABNTEXsubsubsectionfontsize}{\normalsize}   
-\setlength{\beforesubsubsecskip}{1.5ex}												% espaçamento entre titulo da sub sub seção e o paragrafo anterior de aproximadamente 1.5
-\setlength{\aftersubsubsecskip}{1.5ex} 												% espaçamento entre titulo da sub sub seção e o paragrafo seguinte de aproximadamente 1.5
-\setlength{\cftbeforesubsubsectionskip}{0.75ex}   									% espaçamento de 1.5 no sumário
-\renewcommand{\cftsubsubsectionfont}{\ABNTEXsubsubsectionfont}      				% definir mesmo estilo de fonte no sumário
+\renewcommand{\cftsubsubsectionfont}{\ABNTEXsubsubsectionfont}
 \renewcommand{\cftsubsubsectionpagefont}{\cftsubsubsectionfont}
+
+\renewcommand{\cftparagraphfont}{\ABNTEXsubsubsubsectionfont}
+\renewcommand{\cftparagraphpagefont}{\cftparagraphfont}
+% --- 
+
+
 
 % nome de seção em maiúsculo no sumário
 % https://tex.stackexchange.com/a/399861
