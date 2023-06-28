@@ -131,13 +131,15 @@ Seja qual for o paradigma de implementação escolhido, motor de execução a se
 
 \subsubsection{Disparos simultâneos}
 
-Quando duas transições estão sensibilizadas simultaneamente, no momento do disparo qual deve ser o comportamento? Há algumas formas de pensar sobre tal dilema, uma possível solução seria a utilização de rede de petri priorizadas em que uma transição é priorizada sobre outra, garantindo assim que apenas umas delas dispare por vez.
+Quando duas transições estão sensibilizadas simultaneamente, no momento do disparo qual deve ser o comportamento? Há algumas formas de pensar sobre tal dilema. Uma possível solução seria a utilização de rede de petri priorizadas em que uma transição é priorizada sobre outra, garantindo assim que apenas umas delas dispare por vez.
 
-Outra maneira é garantir a propriedade de uma transição por disparo, parando o processamento após o primeiro disparo, que será realizado na transição sensível de menor índice, o que pode por vezes causar ambiguidade sobre qual transição será disparada antes.
+Outra maneira é garantir a propriedade de unicidade, ou seja, que apenas uma transição seja executada por vez. Há duas formas de garantir isso, permitindo que apenas uma transição seja sensibilizada por vez, ou que várias sejam sensibilizadas mas apenas o disparo de uma seja efetuado. Visto que será realizada a implementação de transições temporizadas, deve-se pensar que várias transições podem ser marcadas como sensibilizadas a fim de serem temporizadas e disparadas posteriormente, como discutido na seção \ref{section:delay}. 
 
-Para esta implementação será utilizada a segunda opção devido à simplicidade e ao fato das redes serem temporizadas, de entrada/saída e serem executadas em tempo real, diminuindo naturalmente a probabilidade que haja colisão de sensibilidade entre uma ou mais transições ao mesmo tempo, devido às entradas virem de um sistema físico real em tempo real. Delimita se assim um aviso de ambiguidade para este tipo de implementação e a necessidade de se garantir apenas uma transição por disparo na rede.
+Portanto, irá se permitir a sensibilização de várias transições, mas apenas uma poderá ser disparada por vez em um ciclo de execução. O processamento dos disparos será parado após o primeiro disparo, que será realizado na transição sensível de menor índice, o que pode por vezes causar ambiguidade sobre qual transição será disparada antes.
 
-Tal discussão também se estende as transições temporizadas, que ao serem executadas de forma assíncrona podem vir a se sobrepor a outras transições sensibilizadas, novamente nosso comprometimento irá garantir que apenas uma aconteça por vez.  
+Pelo fato de desejarmos que a rede seja temporizada, de entrada/saída e de ser executada em tempo real, diminui-se naturalmente a probabilidade que haja colisão de disparo entre uma ou mais transições ao mesmo tempo, devido às entradas virem de um sistema físico real em tempo real e de algumas transições serem temporizadas. 
+
+Assim, deixa se um aviso de ambiguidade para este tipo de implementação, pois mesmo que que seja garantido o disparo de uma só transição, eliminando o dilema do disparo mútuo, ainda pode-se ocorrer ambiguidade sobre qual transição será disparada na rede, porém menos comum, dado o tipo de rede trabalhada. Fica assim à critério do autor da rede de petri garantir que, para que uma transição seja priorizada em uma situação de ambiguidade, que a mesma seja de menor índice ou que se empregue um mecanismo auxiliar com outros lugares e transições para garantir o comportamento desejado. 
 
 \subsubsection{Entradas}
 
@@ -148,6 +150,7 @@ Para fins de simplificação será reforçado que cada transição seja atrelada
 Casos onde deseja-se tal comportamento, pode-se fácil e seguramente ser implementado utilizando múltiplas transições e lugares auxiliares, deixando assim essa abstração de responsabilidade do autor da rede de petri.
 
 \subsection{Temporização}
+\label{section:delay}
 
 As transições temporizadas funcionam como retardos de tempo. Dado uma transição que depende de um evento de entrada e de arcos condicionais, como arcos de peso e arcos negados, está começará a contar a partir do momento que todas as condições forem satisfeitas. A contagem é realizada até o tempo determinado, onde a transição será disparada somente se as condições dos arcos ainda permanecem verdadeiras. Se as condições permitirem e a transição for sensibilizada novamente, a contagem atual deve continuar normalmente até que a transição tenha chance de tentar disparar, momento em que será liberada para iniciar a contagem novamente se requerido. 
 

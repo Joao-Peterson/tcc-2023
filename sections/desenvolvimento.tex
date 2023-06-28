@@ -453,7 +453,7 @@ Para este arquivo, dado o nome da biblioteca e do indicador no cabeçalho, sua e
 
 \section{Algoritmo de compilação para lista de instrução}
 
-A compilação para lista de instrução foi baseada no método de compilação para \textit{Ladder} apresentado no trabalho Petrilab \cite{de2015petrilab}, porém qui, para lista de instrução. Fato que é possível devido à característica de que programação \textit{Ladder} pode ser gerada a partir de uma lista de instrução e vice-versa.   
+A compilação para lista de instrução foi baseada no método de compilação para \textit{Ladder} apresentado no trabalho Petrilab \cite{de2015petrilab}, porém aqui, para lista de instrução. Fato que é possível devido à característica de que programação \textit{Ladder} pode ser gerada a partir de uma lista de instrução e vice-versa.   
 
 Como está sendo implementando um compilador para lista de instrução, sabe-se que funcionalidades de borda de eventos e temporizadores são de fácil acesso, dispensando-se a criação de estruturas adicionais para implementação dos mesmos, e portanto, podemos compilar a rede de petri de forma mais simples, mapeando estas funcionalidades diretamente conforme necessário. Diferente da biblioteca C, onde foi desenvolvido o funcionamentos dessas funcionalidades.
 
@@ -461,7 +461,7 @@ Para a compilação serão definidas as seções assim como implementados na bib
 
 \begin{itemize}
 	\item Marcação inicial
-	\item sensibilização
+	\item Sensibilização
 	\item Disparo
 	\item Lógica de saída
 \end{itemize}
@@ -470,9 +470,9 @@ Cada passo será desenvolvido de forma sequencial, para ter-se esta ordem de exe
 
 Para compilação para código C usaremos uma função facilitadora, \lstinline{string_cat_fmt}, que é uma função feita com base na biblioteca C padrão, parecida com a função \lstinline{printf} mas que recebe uma string de formatação, a expande e concatena o resultado em um buffer de saída. Assim temos ao início um buffer vazio, e vamos inserindo as instruções até que ao final tenhamos o programa compilado. 
 
-Também iremos utilizar as constantes \lstinline{INITIAL_RE}, que se refere a memória \lstinline{M8001} que é ativa por apenas um ciclo quando o PLC é inicializado, e \lstinline{ALWAYS}, a memória especial \lstinline{M8000}, que é sempre ativa durante a execução do código.
+Também iremos utilizar as constantes \lstinline{INITIAL_RE}, que se refere a memória \lstinline{M8002} que é ativa por apenas um ciclo quando o PLC é inicializado, e \lstinline{ALWAYS}, a memória especial \lstinline{M8000}, que é sempre ativa durante a execução do código.
 
-Como parte do algoritmo de compilação devemos definir algumas memórias temporárias e memórias para o estado da rede. Será definido que as transições e sua sensibilização via temporizador e entradas serão feitas e então armazenadas em uma memória simples, no PLC, uma memória \lstinline{M}. Para os lugares necessitamos armazenar a quantidade de fichas atual para cada um, então utilizaremos uma unidade de memória não binária, uma memória \lstinline{word} de 16 bits, no PLC, memória tipo \lstinline{D}. As entradas e saídas serão respectivamente \lstinline{X} e \lstinline{Y}.
+Como parte do algoritmo de compilação devemos definir algumas memórias temporárias e memórias para o estado da rede. Será definido que as transições e sua sensibilização via temporizador e entradas serão feitas e então armazenadas em uma memória simples, no PLC, uma memória \lstinline{M}. Transições temporizadas utilizaram uma memória auxiliar extra. Para os lugares necessitamos armazenar a quantidade de fichas atual para cada um, então utilizaremos uma unidade de memória não binária, uma memória \lstinline{word} de 16 bits, no PLC, memória tipo \lstinline{D}. As entradas e saídas serão respectivamente \lstinline{X} e \lstinline{Y}.
 
 Ainda iremos ter um pulo condicional usado para satisfazer a condição definida na seção \ref{section:limitations}, dado no PLC pela instrução \lstinline{J}, para marcação, e \lstinline{CJ} para o pulo condicional.
 
@@ -485,8 +485,8 @@ Temos assim a seguinte chamada de função para realização da compilação da 
 	caption={Definição da função de compilação para lista de instrução},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=11,
-	lastline=11,
+	firstline=23,
+	lastline=23,
 	label=code:tpw1
 ]{code/tpw.c}
 
@@ -523,94 +523,109 @@ Em código C isso pode ser implementado por um laço de repetição pelos lugare
 	caption={Compilação da marcação dos lugares iniciais},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=16,
-	lastline=20,
+	firstline=29,
+	lastline=33,
 	label=code:tpwi
 ]{code/tpw.c}
 
-A detecção de entrada e sensibilização de transições é relativamente fácil e será dada como os eventos de entrada mapeados para uma memória auxiliar que irá ser usada para movimentar as fichas. Para entradas normais temos:
+A sensibilização das transições é relativamente fácil, e será dada como os eventos de entrada juntamente as condições de disparo, mapeadas para uma memória auxiliar que irá ser usada para movimentar as fichas. Para entradas normais temos:
 
 \lstinputlisting[
 	language=C,
 	caption={Exemplo de lista de instrução - Sensibilização},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=12,
-	lastline=16,
+	firstline=18,
+	lastline=20,
 	label=code:ilsense
 ]{code/il.txt}
 
-Observa-se a instrução a mais de pulo condicional, tal condição é usada aqui para implementar a limitação dada à rede acerca de disparos mútuos, discutidos na seção \ref{section:limitations}. O pulo irá ocorrer nas sensibilizações, pois pode-se definir o resultado de temporizações em sequência devido à arquitetura do ambiente de execução do PLC, diferente da biblioteca C, facilitando assim a definição desses disparos assíncronos. Esse pulo condicional será para uma marcação de execução, por exemplo \lstinline{P0}, posteriormente feita no início da sequência de disparo.  
+Para transições temporizadas, devemos além de ter se as condições de sensibilização e eventos de entrada, ter-se um temporizador. Na referência WEG TPW04, tal temporizador é dado em código como \lstinline{OUT T# K#}, onde \lstinline{T} é o índice do temporizador e \lstinline{K} a quantidade de tempo. Para transições com entrada, gera-se apenas um pulso para ativação do temporizador, por isso devemos utilizar uma memória auxiliar extra para garantir que após um pulso, o temporizador continue contando, utilizando um arranjo chamado de selo.
+
+O Selo é basicamente uma memória auxiliar que é ativada juntamente a saída original, no nosso caso, o temporizador. E ainda mais, utiliza-se o estado desta memória como entrada auxiliar a entrada de pulso original utilizando a operação lógica ``ou''. O resultado é que quando o pulso de entrada ativa a saída e a memória auxiliar, esta mesma mantém as saídas acionadas, mesmo sem o pulso de entrada.
+
+Para desativar o selo devemos adicionar utilizar a operação lógica ``e'' negada com as entradas e uma memória externa, que enquanto estiver em estado desligada, permitirá que a entrada acione as saídas e o selo aconteça, porém quando acionada, negará o valor das entradas, inclusive da memória selo, desativando o selo e também o temporizador. Como estamos interessados em um pulso desse temporizador para indicar sensibilização da transição, será utilizado a memória \lstinline{T} do próprio temporizador, que se torna ativa quando o mesmo termina a contagem.
+
+Ainda mais, a memória \lstinline{T} será utilizada para com uma memória \lstinline{M}, análoga a memória auxiliar de uma transição normal, para indicar que a transição temporizada encontra-se agora sensibilizada. Assim temos o efeito geral de, quando ocorrer um pulso de entrada e as condições de disparo forem verdadeiras, um selo acontece, habilitando a contagem do temporizador que após chegar ao final da contagem irá, romper o selo, se auto desligando, e acionando com um pulso a memória auxiliar da transição.
 
 \lstinputlisting[
 	language=C,
 	caption={Exemplo de lista de instrução - Sensibilização com temporizador},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=61,
-	lastline=71,
+	firstline=8,
+	lastline=15,
 	label=code:iltimer
 ]{code/il.txt}
 
-No disparo de transições temporizadas temos que a entrada aciona o temporizador, que quando for acionado, irá ao mesmo tempo, acionar a memória de sensibilização, irá se autorreinicializar e fará o pulo condicional para os disparos. Como visto no código \ref{code:iltimer}.
+% No disparo de transições temporizadas temos que a entrada aciona o temporizador, que quando for acionado, irá ao mesmo tempo, acionar a memória de sensibilização, irá se autorreinicializar e fará o pulo condicional para os disparos. Como visto no código \ref{code:iltimer}.
 
-A compilação das entradas e timers pode ser dada por um laço de repetição pelas transições e entradas. Caso não houverem entradas, a transição sempre dispara, e caso houverem, verifica-se se são temporizadas ou não. Caso não sejam temporizadas, implementamos o código de lista de instrução como no código \ref{code:ilsense}, caso sejam temporizadas, como no código \ref{code:iltimer}. Em código C temos: 
+Nota-se que, para a memória auxiliar do selo, será utilizada a mesma região de memória das memórias auxiliares das transições, porém deslocada $n$ transições acima do deslocamento dado ao compilador. Assim, para uma rede de seis transições, se a segunda transição for temporizada, e o deslocamento inicial das memórias for de trinta, então temos que as memórias das transições serão \lstinline{M30, M31, M32} e a memória auxiliar de selo da terceira transição será \lstinline{M37}, dado à soma de deslocamento mais quantidade de transições mais índice da transição, $30 + 6 + 1 = 37$.
+
+A compilação das entradas, condições e timers pode ser dada por um laço de repetição pelas transições e entradas. Caso não houverem entradas, a transição sempre dispara, e caso houverem, verifica-se se são temporizadas ou não. Caso não sejam temporizadas, implementamos o código de lista de instrução como no código \ref{code:ilsense}, caso sejam temporizadas, como no código \ref{code:iltimer}. Varremos assim, as matrizes de temporização e de entrada e verificamos se para dada transição a entrada e temporização correspondente, se houver. Em código C temos: 
 
 \lstinputlisting[
 	language=C,
-	caption={Compilação da sensibilização das entradas},
+	% caption={Compilação da sensibilização das entradas},
+	caption={Verificação de evento de entrada e de temprização para uma transição},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=23,
-	lastline=80,
+	firstline=39,
+	lastline=72,
 	label=code:tpwi
 ]{code/tpw.c}
 
-Onde na linha 2 verifica-se se há uma matriz de entrada, caso não todas as transições são sensibilizadas por padrão. Na linha 8 vemos o laço pelas entradas.
+Note que na linha 17 em diante, com base no evento de entrada, já pode-se inserir a condição de entrada no código compilado.
 
-Linha 9, caso tenhamos varrido todas as entradas e não houver entrada atrelada a esta transição, então marcar a transição como sensibilizada. 
+Com as informações da transição, pode-se então compilar o código para mesma.
 
-Linha 15, se houver entrada e transição for temporizada, então realizamos um comparação com o tipo de entrada na linha 19. Para entrada de borda de subida, linha 21, para borda de descida 25, e para ambas bordas, linha 30.
+\lstinputlisting[
+	language=C,
+	caption={Compilação da sensibilização da transição},
+	sourcePrefix={Fonte: },
+	source={Do autor.},
+	firstline=74,
+	lastline=102,
+	label=code:tpwi
+]{code/tpw.c}
 
-Linha 36, caso a transição não tenha temporização mas tenha entrada, temos os mesmos casos de borda que para temporização, ma o código de lista de instrução é diferente.
+Como a entrada já foi inserida, basta apenas inserir as condições dos arcos, arcos de peso negativo com a instrução \lstinline{AND>=} e os arcos negados com a instrução \lstinline{AND=}, linhas 6 à 20 do código acima. E também a saída da sensibilização da transição, linha 29.
 
-E por fim, linha 51, caso encontrarmos um caso onde que não seja temporizado e nem com entrada, os laço de repetição para as entradas será continuado normalmente, até que a condição da linha 9 ative e a transição seja marcada como sempre acionada, como mencionado anteriormente.
+Nota-se nas linhas 2 e 23, o tratamento especial caso houver temporização para a transição, onde irá ser adicionado o código relevante a temporização, conforme o exemplo do código \ref{code:iltimer}.
 
-Para a movimentação das fichas pelo disparo, primeiramente vamos verificar as condições de sensibilização, checando os arcos negativos e com a instrução \lstinline{AND>=} e os arcos negados com a instrução \lstinline{AND=}. No código \ref{code:ilfire}, verifica-se que para os arcos de peso negativos, verificamos se os lugares possuem a mesma quantidade ou mais fichas que uma constante, esta é dada pela matriz de pesos negativos. Para os arcos negados, verificamos se o lugar possui quantidade de fichas igual a zero.
+Para o disparo e movimentação das fichas, deve-se adicionar as instruções de aritméticas conforme o tipo de arco. Arcos de peso negativos e positivos, que irão usar as instruções de subtração e adição para movimentação das fichas, \lstinline{SUB} e \lstinline{ADD} respectivamente, e o arco de \textit{reset}, que usa a instrução de movimentação \lstinline{MOV} com constante zero.
+
+Para cada transição, se carrega o valor de sensibilização da mesma, e adicionam-se as instrução de movimentação. Caso hajam várias, utiliza-se a instrução \lstinline{MPS} e relacionadas para se ativar as diversas saídas. Agora para cada lugar, adicionam-se as instruções de \lstinline{ADD} para os arcos positivos, \lstinline{SUB} para os arcos negativos e de \lstinline{MOV} para os arcos de reset. Entre cada instrução devemos ler o valor da sensibilização da transição usando \lstinline{MRD}. Na última instrução de movimentação usamos \lstinline{MPP} para limpar o valor da sensibilização da pilha e escrevemos a última instrução.
+
+Como visto na seção \ref{section:limitations}, deve-se garantir o disparo de apenas uma transição, para isso irá se utilizar um pulo condicional, que irá impedir a execução de outros disparos. O pulo será para uma marcação de execução, por exemplo \lstinline{P0}, que é localizada na instrução a frente da última instrução da última movimentação, efetivamente pulando todas os disparos. A instrução para o pulo é \lstinline{CJ}.  
 
 \lstinputlisting[
 	language=C,
 	caption={Exemplo de lista de instrução - Disparo das transições},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=41,
-	lastline=47,
+	firstline=67,
+	lastline=75,
 	label=code:ilfire
 ]{code/il.txt}
-
-Dada a verificação, os arcos de movimentação serão acionados. No exemplo, arcos de peso negativos e positivos, que irão usar as instruções de subtração e adição para movimentação das fichas. Um arco de \textit{reset} em contrapartida usaria uma instrução \lstinline{MOV} com constante zero, caso estivesse presente neste exemplo.
-
-A implementação é realizada por um laço de repetição pelas transições e pelos lugares. Primeiramente carregamos o valor da memória temporária referente a transição atual, então, em série, adicionam-se as condições lógicas de comparação para os tipos de arco de peso negativo e/ou de arco negado, entre a transição e cada lugar, se houverem.  
-
-Armazena-se o valor computado após as condições usando a instrução \lstinline{MPS}. Agora para cada lugar, adicionam-se as instruções de \lstinline{ADD} para os arcos positivos, \lstinline{SUB}para os arcos negativos e de \lstinline{MOV} para os arcos de reset, se houverem estes arcos. Entre cada instrução devemos ler o valor computado pelas condições anteriores usando \lstinline{MRD}. Na última instrução de movimentação usamos \lstinline{MPP} para limpar o valor de condição anterior da pilha e escrevemos a última instrução.
 
 Em código C temos:
 
 \lstinputlisting[
 	language=C,
-	caption={Compilação dos arcos condicionais e movimentação das fichas},
+	caption={Compilação da movimentação das fichas},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=82,
-	lastline=135,
+	firstline=105,
+	lastline=176,
 	label=code:tpwi
 ]{code/tpw.c}
 
-Na linha 1 definimos a marcação para o pulo condicional, indicando que aqui iniciam-se os disparos após a detecção de entrada e temporização. 
+Nas linhas 8 à 37 iremos percorrer as matrizes de arcos de peso negativos, positivos e de arco de \textit{reset}, necessário pois assim saberemos a quantidade de instruções à serem inseridos para uma transição.  
 
-Na linha 6 começamos carregando o valor de sensibilidade da transição verificado anteriormente. Na linhas 8, um laço de repetição por todos os lugares, onde verificamos se para dado lugar e transição existe um arco de peso negativo ou arco negado, e se for o caso, adicionar uma comparação das fichas usando \lstinline{AND>=} para o arco de peso e \lstinline{AND= K0} para o arco negado.
+Na linha 41, começamos carregando o valor de sensibilidade da transição verificado anteriormente. Na linha 43, um laço de repetição por todos os arcos computados anteriormente, verificando se há necessidade de inserção das instruções de memória \lstinline{MPS, MRD, MPP}.
 
-Na linha 31 então iremos então adicionar as movimentações das fichas, usando as instruções de memória \lstinline{MPS, MRD, MPP} para os vários arcos do lugar/transição, o arco de peso negativo, que usa a instrução \lstinline{SUB}, arco positivo com a instrução \lstinline{ADD} e de \textit{reset} com \lstinline{MOV}. 
+Na linhas 53 verificamos o tipo do arco a ser adicionado, adicionando as movimentações das fichas, para arco de peso negativo, a instrução \lstinline{SUB}, arco positivo a instrução \lstinline{ADD} e arco de \textit{reset}, instrução \lstinline{MOV}. 
 
 Por fim temos as saídas, as quais só utilizam a comparação entre os lugares e uma constante dada pela matriz de saída, e após a comparação, acionam a saída física.
 
@@ -619,10 +634,12 @@ Por fim temos as saídas, as quais só utilizam a comparação entre os lugares 
 	caption={Exemplo de lista de instrução - Saídas},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=56,
-	lastline=57,
+	firstline=76,
+	lastline=78,
 	label=code:ilout
 ]{code/il.txt}
+
+Nota-se na linha 1 a definição da marcação para o pulo condicional, necessário para garantir o disparo único da transições. 
 
 Implementando, faremos um laço de repetição entre os lugares e as saídas, para cada lugar, verifica-se se há uma saída atrelada, se houver, verifica-se se o lugar possui a mesma quantidade ou mais fichas do que necessárias, usando a instrução \lstinline{LD>=} para com a memória do lugar. Então, em seguida usamos a instrução \lstinline{OUT} para redirecionar o valor da comparação para a saída atrelada. 
 
@@ -633,8 +650,8 @@ Em código C temos:
 	caption={Compilação para as codições de saída},
 	sourcePrefix={Fonte: },
 	source={Do autor.},
-	firstline=137,
-	lastline=144,
+	firstline=183,
+	lastline=190,
 	label=code:tpwi
 ]{code/tpw.c}
 

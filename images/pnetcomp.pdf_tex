@@ -54,17 +54,25 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{pnetcomp.pdf}}%
-    \put(0.23163891,0.42606722){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
-    \put(0.42052155,0.35722673){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_0 \uparrow$\\\end{tabular}}}}%
+    \put(0.09207922,0.40770578){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{pnetcomp.pdf}}%
-    \put(0.41991081,0.07000303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_2 \uparrow$\\\end{tabular}}}}%
+    \put(0.23772709,0.24131207){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$10$\end{tabular}}}}%
+    \put(0.51698914,0.35710782){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_0 \uparrow$\\\end{tabular}}}}%
+    \put(0.58135929,0.42817405){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$2$\\\end{tabular}}}}%
+    \put(0.76160665,0.42817404){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$2$\\\end{tabular}}}}%
+    \put(0.58135924,0.27769227){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$3$\\\end{tabular}}}}%
+    \put(0.76160669,0.2776922){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$3$\\\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{pnetcomp.pdf}}%
-    \put(0.62661643,0.01212544){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_3 \uparrow$\\\end{tabular}}}}%
+    \put(0.81419649,0.35766439){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_2 \uparrow$\\\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{pnetcomp.pdf}}%
-    \put(0.42052135,0.20013037){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_1 \uparrow$\\\end{tabular}}}}%
-    \put(0.40327992,0.32636024){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\SI{5000}{ms}$\end{tabular}}}}%
+    \put(0.81399422,0.20714443){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_3 \uparrow$\\\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{pnetcomp.pdf}}%
-    \put(0.61045995,0.35537214){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y_0,  >1$\end{tabular}}}}%
-    \put(0.61046,0.19967964){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y_1, >1$\end{tabular}}}}%
+    \put(0.51698899,0.20856867){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x_1 \uparrow$\\\end{tabular}}}}%
+    \put(0.50431652,0.32449899){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\SI{5000}{ms}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{pnetcomp.pdf}}%
+    \put(0.65581551,0.34473403){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y_0,  >1$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{pnetcomp.pdf}}%
+    \put(0.6558156,0.19590588){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y_1,  >1$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{pnetcomp.pdf}}%
   \end{picture}%
 \endgroup%
