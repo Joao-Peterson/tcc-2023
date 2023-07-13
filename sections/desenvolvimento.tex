@@ -210,6 +210,8 @@ Também referente a implementação são realizados os seguintes testes prático
 
 Dado uma rede petri válida, para que antes de a executarmos em tempo real, precisamos executá-la uma única vez, um disparo, e para isso necessitamos antes verificar quais transições estão sensibilizadas dado o estado atual, dado pela matriz \lstinline{places}, visto no código \ref{code:pnet}. Para isso utilizaremos um simples algoritmo que irá varrer e comparar os mapas dos arcos de condição, que são os arcos de peso negativos e arcos negados, com o estado atual da rede.
 
+O ponto de entrada para execução da análise de sensibilização será uma função distinta denominada \lstinline{pnet_sense}, qual receberá como argumento a estrutura da rede de petri e armazenará o resultado em uma matriz interna que representa as transições sensibilizadas.
+
 \lstinputlisting[
 	language=C,
 	caption={Sensibilização das transições},
@@ -222,13 +224,11 @@ Na implementação primeiramente dizemos que, para determinada transição, ela 
 
 Note que a matriz das transições \lstinline{sensitive_trasitions} é interna a rede de petri e que a cada verificação de sensibilidade retorna várias transições sensibilizadas, que está em contradição com nossa especificação da seção \ref{section:limitations}, porém será tratada posteriormente na realização de disparos.   
 
-O ponto de entrada para realização análise de sensibilização será uma função distinta denominada \lstinline{pnet_sense}.
-
 \subsection{Disparo}
 
 Dada uma matriz com as transições a serem sensibilizadas é necessário ainda verificar se as transições possuem relação de entrada, caso no qual deverá ser feita uma verificação das bordas de entrada. A verificação das bordas de entrada é feita comparando se o valor atual é diferente do anterior, para isso é necessário guardar o estado anterior das entradas, seria a matriz \lstinline{inputs_last} dada no código \ref{code:pnet}.
 
-O ponto de entrada para realização dos disparos será uma função distinta denominada \lstinline{pnet_fire}, a qual dentro si realiza uma chamada a função \lstinline{pnet_sense}, incorporando assim a lógica completa de disparos, exceto pelos disparos temporizados, que irão ocorrer de forma assíncrona, discutidos na próxima seção. Na função \lstinline{pnet_fire}, também é repassado o valor atual das entradas externas, assim pode-se verificar se houve mudança e portanto, se houver um evento ou uma borda, e se o evento irá contribuir para o disparo de alguma transição. Para isso verifica-se a entrada com o estado anterior e armazena se o resultado na matriz temporária \lstinline{edges}. 
+O ponto de entrada para realização dos disparos será uma função distinta denominada \lstinline{pnet_fire}, que recebe como argumento a estrutura da rede e o valor atual das entradas externas, assim pode-se verificar se houve mudança das mesmas, e portanto se houve um evento ou uma borda e se o evento irá contribuir para o disparo de alguma transição. Para isso verifica-se a entrada com o estado anterior e armazena se o resultado na matriz temporária \lstinline{edges}. A função ainda, dentro si, realiza uma chamada a função \lstinline{pnet_sense}, incorporando assim a lógica completa de disparos, exceto pelos disparos temporizados, que irão ocorrer de forma assíncrona, discutidos na próxima seção.
 
 \lstinputlisting[
 	language=C,
@@ -447,6 +447,7 @@ Para este arquivo, dado o nome da biblioteca e do indicador no cabeçalho, sua e
 	\caption{Visão do arquivo pnet em um analisador hexadecimal}
 	\includegraphics[width=16cm]{images/hexfile.png}
 	\label{fig:hexfile}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 \pagebreak
@@ -498,6 +499,7 @@ Dada uma rede de petri exemplo, figura \ref{fig:pnetcomp}, vamos analisar o proc
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/pnetcomp}\\
 	\label{fig:pnetcomp}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 Na rede de petri, abaixo das transições temos o evento de borda relacionado a entrada, abaixo dos lugares temos a legenda da saída e a condição lógica de ativação da mesma.

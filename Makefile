@@ -9,12 +9,14 @@ TEX_FLAGS=--shell-escape --interaction=batchmode --halt-on-error --synctex=-1
 ####################################################################################
 # Área reservada (não alterar)
 
-SYNC_LINE = 1
-SYNC_FILE = main.tex
+SYNC_LINE=1
+SYNC_FILE=main.tex
+
+VECTORS:=$(subst .svg,.pdf,$(shell find images/ -name "*.svg"))
 
 ####################################################################################
 
-.PHONY : main.aux
+.PHONY : main.aux images beamer
 
 quick : main.aux
 	@rm -f $(shell find . -name '*.aux')
@@ -32,6 +34,16 @@ build : main.aux main.bbl
 main.bbl : main.aux
 	bibtex $(basename $@)
 
+images: $(VECTORS)
+	@echo -n $^
+
+images/%.pdf: images/%.svg
+	@echo -n $<
+	inkscape $< --export-area-page --export-dpi 300 --export-type=pdf --export-latex --export-filename $@
+
+beamer : beamer/main.tex
+	$(TEX_CC) $(TEX_FLAGS) --output-directory=$@ $(basename $<).tex
+
 sync :
 	okular --unique --noraise main.pdf#src:$(SYNC_LINE)$(SYNC_FILE)
 
@@ -43,14 +55,16 @@ clear :
 	@rm -f $(shell find . -name '*.toc')
 	@rm -f $(shell find . -name '*.aux')
 	@rm -f $(shell find . -name '*.log')
+	@rm -f $(shell find . -name '*.lol')
 	@rm -f $(shell find . -name '*.out')
 	@rm -f $(shell find . -name '*.synctex')
 	@rm -f $(shell find . -name '*.blg')
-	@rm -f $(shell find . -name '*.pdf')
 	@rm -f $(shell find . -name '*.idx')
 	@rm -f $(shell find . -name '*.lof')
 	@rm -f $(shell find . -name '*.lot')
 	@rm -f $(shell find . -name '*.bbl')
+	@rm -f $(shell find . -name '*.nav')
+	@rm -f $(shell find . -name '*.snm')
 
 
 # info:

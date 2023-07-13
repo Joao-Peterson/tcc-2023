@@ -24,6 +24,7 @@ Uma rede de petri é composta por lugares, transições, fichas e arcos. Cada co
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/samplepetri}\\
 	\label{fig:samplepetri}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 \pagebreak
@@ -64,6 +65,7 @@ Particularmente no uso industrial a utilização de temporização é indispens�
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/petritime}\\
 	\label{fig:petritime}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 Os arcos com peso são úteis, porém é fácil encontrar situações onde algumas abstrações se fazem convenientes, como no caso de realizar a retirada de todos as fichas de um lugar de uma só vez, um comedor de fichas, figura \ref{fig:comedor}, cujo trabalho é exatamente este. Conforme a lógica desejada, tal comportamento pode ser também atrelado a outro tipo de arco, o arco de \textit{reset} (reinicialização) \cite{ResetNetsBetweenDecidabilityAndUndecidability}, não presente na implementação do Petrilab, onde após o disparo de uma transição o mesmo irá remover todos as fichas do lugar atrelado, sendo essa relação não direcional, como nos arcos de peso. Um exemplo de arco de \textit{reset} pode ser visto na figura \ref{fig:reset}. 
@@ -74,6 +76,7 @@ Os arcos com peso são úteis, porém é fácil encontrar situações onde algum
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/comedor}\\
 	\label{fig:comedor}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 \begin{figure}[ht]
@@ -82,6 +85,7 @@ Os arcos com peso são úteis, porém é fácil encontrar situações onde algum
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/reset}\\
 	\label{fig:reset}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 Ainda há mais um tipo de arco de interesse, por vezes pode ser necessário a criação de lógicas de exclusão mútua, ou de verificação simples, podendo vir a utilizar um arranjo lógico de lugares e transições dedicado, tendo a função de detectar quando não há fichas em lugar, comportamento que pode ser alcançado com um único arco, o arco de negado, também chamado de arco inibidor, que somente permite o disparo de uma transição quando não há fichas em um determinado lugar.
@@ -92,6 +96,7 @@ Ainda há mais um tipo de arco de interesse, por vezes pode ser necessário a cr
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/negado}\\
 	\label{fig:negado}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 Tal arco permite abstrações mais simples mas também possibilita que nossa rede de petri seja computacionalmente completa \cite{petrinetTuringComplete}, ou seja, teoricamente ela pode vir a computar qualquer problema, propriedade útil quando desejamos que nossa rede de petri seja capaz de modelar qualquer tipo de sistema visando a automação industrial, e também que isso seja feito de forma conveniente.  
@@ -183,6 +188,7 @@ Suas vantagens em relação às listas normais são que elas não tem espaço de
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/linked}\\
 	\label{fig:linked}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 Para implementações em C a lista é basicamente um conjunto de nós, que são estruturas que guardam dentro de si um valor de tipo desejado, e um ponteiro de memória para outro nó na lista.
@@ -201,6 +207,7 @@ Um exemplo de fila priorizada seria uma onde processamos pacotes de entrega, sej
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/prio}\\
 	\label{fig:prio}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 \subsection{\textit{Threads} e \textit{mutex locks}}
@@ -217,6 +224,7 @@ A execução concorrente de \textit{threads} também pode trazer desafios. Um pr
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/mutex}\\
 	\label{fig:mutex}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 \subsection{\textit{Threads} e \textit{callbacks}}
@@ -333,6 +341,7 @@ Para saída iremos utilizar as instruções de memória, inserindo o valor após
 	%\incsvg{path/}{path/file}
 	\incsvg{images}{images/illadder}\\
 	\label{fig:illadder}
+	\footnotesize{Fonte: Do autor.}
 \end{figure}
 
 Podem haver outras implementações e variações desta apresentada, porém, serve de ilustração para a capacidade de se converter entre as linguagens, provando em torno também que quando se tem um programa em lista de instrução, podemos facilmente alcançar outros paradigmas e linguagens, se tornando um ótimo alvo base para compilação de programas.

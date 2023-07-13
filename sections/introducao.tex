@@ -1,13 +1,13 @@
 \chapter{Introdução}
 
-Quando se trata de sistemas dinâmicos como um todo há sempre um interesse de criar, entender, prever e controlar estes sistemas, e no âmbito de sistemas discretos orientados a eventos \footnote{Sistemas que trabalham com valores discretos como ligado e desligado por exemplo, e possuem mudança de estado conforme eventos também discretos.}, como alguns sistemas industriais de automação de interesse neste trabalho, há várias metodologias, práticas, tecnologias e linguagens de programação capazes de trabalhar estes sistemas de forma a alcançar resultados esperados, cada qual possuí vantagens e desvantagens.
+Quando se trata de sistemas dinâmicos como um todo, há sempre um interesse de criar, entender, prever e controlar estes sistemas, e no âmbito de sistemas discretos orientados a eventos \footnote{Sistemas que trabalham com valores discretos como ligado e desligado por exemplo, e possuem mudança de estado conforme eventos também discretos.}, como alguns sistemas industriais de automação de interesse neste trabalho, há várias metodologias, práticas, tecnologias e linguagens de programação capazes de trabalhar estes sistemas de forma a alcançar resultados esperados, cada qual possuí vantagens e desvantagens.
 
 No âmbito industrial, para realizar o controle e automação de processos, comumente são utilizados controladores lógicos programáveis, PLC's, e estes podem ser programados para realizar as funções desejadas e para isso empregam a utilização de linguagens de programação como: 
 
 \begin{itemize}
 	\item \textit{Ladder}, que representa um processo linear de forma visual inspirada em lógica de contatos \footnote{Uma forma simples de programação baseada na representação visual de lógica de contato, como vista em diagramas com relés e contatoras.}.
 	\item Lista de instrução, que é uma linguagem escrita, não visual, e que representa um fluxo de operações com base em comandos de texto.
-	\item Grafcet, uma linguagem visual que representa um processo em forma de fluxo com base em passos de um nó para outro nó do processo, onde cada nó é uma instrução de ação e cada passo é dado conforme uma transição atrelada a um evento. 
+	\item SFC, uma linguagem visual que representa um processo em forma de fluxo com base em passos de um nó para outro nó do processo, onde cada nó é uma instrução de ação e cada passo é dado conforme uma transição atrelada a um evento. 
 \end{itemize}
 
 Ainda há outras tecnologias que possuem outras formas abstratas e abordagens diferentes, sendo a linguagem \textit{Ladder} um exemplo de aproveitamento de conhecimento e simplicidade, porém há casos onde certas ferramentas não apresentam melhor desempenho e eficiência dado certos tipos de especificações, em especial no caso do \textit{Ladder}, onde controle de estado \footnote{Armazenamento e lógica do estado/situação atual de um processo} e paralelismo \footnote{Capacidade de unir dois fluxos de trabalho com razões de trabalho diferentes em um ponto definido.} são conceitos difíceis de serem implementados. 
@@ -24,7 +24,7 @@ Esse tipo de função é implementada em projetos como \textit{PetriLab} \cite{d
 
 \section{Justificativa}
 
-Sendo apresentado o estado atual de disseminação de utilização de redes de petri, tanto geral como industrial, justifica-se a criação de ferramentaria necessária ao desenvolvimento de aplicações. Aplicações tais que implementam necessariamente formas de representação e execução destas redes, e ainda a funcionalidade de transformar estas redes em programas prontos para utilização em meio industrial.
+Sendo apresentado o estado atual de disseminação de utilização de redes de petri, tanto geral como industrial, justifica-se a criação de ferramentaria necessária ao desenvolvimento de aplicações que a utilizem no meio industrial. Aplicações tais que implementam necessariamente formas de representação e execução destas redes, e ainda a funcionalidade de transformar estas redes em programas prontos para utilização em meio industrial.
 
 A capacidade de transformar tais redes em programas industriais, compreende-se como o processo de compilação, onde a rede de petri é traduzida através de um algoritmo proposto para o resultado de saída, sendo esta saída código puro, arquivos digitais ou programas prontos para utilização com PLC's industriais.
 
@@ -32,7 +32,7 @@ A capacidade de transformar tais redes em programas industriais, compreende-se c
 
 \subsection{Objetivo geral}
 
-Desenvolvimento de um ambiente de definição, simulação e compilação e armazenamento de rede de petri voltadas para utilização em meio industrial, PLC's.
+Desenvolvimento de um sistema de implementação, simulação e armazenamento de rede de petri na forma de uma biblioteca desenvolvida em linguagem C para uso geral, e um algoritmo de compilação que utiliza a biblioteca para gerar programas para PLC's.
 
 \subsection{Objetivos específicos}
 
@@ -40,7 +40,7 @@ Desenvolvimento de um ambiente de definição, simulação e compilação e arma
 	\item Desenvolvimento de uma biblioteca implementada em linguagem C que deve implementar os seguintes pontos: 
 	\begin{itemize}
 		\item Estrutura de dados.
-		\item serialização de dados para armazenamento.
+		\item Serialização de dados para armazenamento.
 		\item Capacidade de checagem e validação.
 		\item Capacidade de execução normal e temporizada de forma assíncrona.
 	\end{itemize}
